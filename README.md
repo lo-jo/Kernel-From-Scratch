@@ -24,8 +24,35 @@ GRUB, the "Grand Unified Bootloader," is commonly used in GNU/Linux systems. It 
 
 ### Screen
 We'll be using the screen as a memory mapped device.
-Specific positions in memory correcpond to certain positions on the screen.
+Specific positions in memory correspond to certain positions on the screen.
 ``` 0xb8000 ``` is the upper-left corner position on the screen.
+
+### Reading from and writing to I/O ports
+I/O ports are accessed using the x86 instructions ```in``` and ```out```
+[In](https://www.gladir.com/LEXIQUE/ASM/in.htm)\
+``` in src, dest ```
+The IN instruction almost always has the operands AX and DX (or EAX and EDX) associated with it. DX (src) frequently holds the port address to read, and AX (dest) receives the data from the port.
+
+[Out](https://www.gladir.com/LEXIQUE/ASM/out.htm)
+The OUT instruction is very similar to the IN instruction. OUT outputs data from a given register (src) to a given output port (dest).
+
+#### Interrupts
+Signal sent to the processor by the hardware indicating an event.
+
+Load Interrupt Descriptor Tables:
+https://www.gladir.com/LEXIQUE/ASM/lidt.htm
+Set interrupt flag
+https://www.gladir.com/LEXIQUE/ASM/sti.htm
+https://en.wikibooks.org/wiki/X86_Assembly/Other_Instructions
+
+
+#### Interrupt descriptor Table 
+The Interrupt Descriptor Table, or IDT, is used in order to show the processor what Interrupt Service Routine (ISR) to call to handle either an exception or an 'int' opcode (in assembly). IDT entries are also called by Interrupt Requests whenever a device has completed a request and needs to be serviced. 
+
+ In an IDT, the base address specified in the descriptor is actually the address of the Interrupt Service Routine (our keyboard handler) that the processor should call when this interrupt is 'raised' (called).
+https://wiki.osdev.org/Interrupt_Descriptor_Table
+
+https://pdos.csail.mit.edu/6.828/2018/readings/i386/s09_04.htm
 
 ### Linker
 Our OS can't link the ASM and the C executables together. \

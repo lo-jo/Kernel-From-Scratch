@@ -9,12 +9,11 @@ NASMFLAGS=-f elf32
 GCCFLAGS=-m32 -c -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
 LDFLAGS=-m elf_i386 -T linker.ld
 
-
 # Define the source files and output files
 ASM_SOURCE=boot.asm
-C_SOURCE=kernel.c
+C_SOURCES=kernel.c idt.c
 ASM_OBJECT=boot.o
-C_OBJECT=kernel.o
+C_OBJECTS=$(C_SOURCES:.c=.o)
 KERNEL=kernel.bin
 
 # Default target
@@ -24,23 +23,24 @@ all: $(KERNEL)
 $(ASM_OBJECT): $(ASM_SOURCE)
 	$(NASM) $(NASMFLAGS) $(ASM_SOURCE) -o $(ASM_OBJECT)
 
-# Compile the C file
-$(C_OBJECT): $(C_SOURCE)
-	$(GCC) $(GCCFLAGS) $(C_SOURCE) -o $(C_OBJECT)
+# Compile each C source file into an object file
+%.o: %.c
+	$(GCC) $(GCCFLAGS) $< -o $@
 
 # Link the object files
-$(KERNEL): $(ASM_OBJECT) $(C_OBJECT)
-	$(LD) $(LDFLAGS) -o $(KERNEL) $(ASM_OBJECT) $(C_OBJECT)
+$(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
+	$(LD) $(LDFLAGS) -o $(KERNEL) $(ASM_OBJECT) $(C_OBJECTS)
 
 # Clean up the generated files
 clean:
-	rm -f $(ASM_OBJECT) $(C_OBJECT) $(KERNEL)
+	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
 
 fclean: clean
 	rm -f *~ \#*\# *.bak
 
+# Emulate the kernel
 emulate: $(KERNEL)
 	$(QEMU) -kernel $(KERNEL)
 
 # Phony targets
-.PHONY: all clean
+.PHONY: all clean fclean emulate

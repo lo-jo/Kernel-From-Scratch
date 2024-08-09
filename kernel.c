@@ -1,42 +1,58 @@
 #include "kernel.h"
+#include "keyboard_map.h"
 
-
-// size_t strlen(const char* str) 
-// {
-// 	size_t len = 0;
-// 	while (str[len])
-// 		len++;
-// 	return len;
-// }
+unsigned int pos = 0;
 
 // https://wiki.osdev.org/Printing_To_Screen
-void write_string(int colour, const char *string){
+void print_k(int colour, const char *string){
     volatile char *video = (volatile char*)VIDEO;
     while( *string != 0 )
     {
-        *video++ = *string++;
-        *video++ = colour;
+        video[pos++] = *string++;
+        video[pos++] = colour;
     }
 }
 
 
-void clear_screen(int color){
+
+void keyboard_handler_main(void) {
+	unsigned char scancode;
+	volatile char *video = (volatile char*)VIDEO;
+	char keycode;
+
+	/* write EOI */
+	write_port(0x20, 0x20);
+
+	/* Read from the keyboard's data buffer */
+	scancode = read_port(KEY_STATUS);
+	/* Lowest bit of status will be set if buffer is not empty */
+	if (scancode & 0x01) {
+		keycode = read_port(KEY_PRESSED);
+		if(keycode < 0)
+			return;
+		video[pos++] = keyboard_map[keycode];
+		video[pos++] = GREEN;	
+	}
+}
+
+
+void clear_screen(int colour){
 	volatile char *video = (volatile char*)VIDEO;
 	unsigned int j = 0;
 
 	// there are 25 lines each of 80 columns; each element takes 2 bytes
 	while(j < 80 * 25 * 2) {
-		/* blank character */
 		video[j] = ' ';
-		/* attribute-byte - light grey on black screen */
-		video[j+1] = color; 		
+		video[j+1] = colour; 		
 		j += 2;
 	}
 }
 void kmain(void)
 {
-	clear_screen(0x05);
-    write_string(PINK, "42");
-
+	clear_screen(WHITE);
+    print_k(PINK, "42");
+	map_idt();
+	write_port(0x21 , 0xFD);
+	while(1);
 	return;
 }
