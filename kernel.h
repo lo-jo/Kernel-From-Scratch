@@ -28,7 +28,8 @@ extern void load_idt(unsigned long *idt_ptr);
 #define CMD2 0xA0
 #define DATA2 0xA1
 
-void map_idt(void);
+void init_idt(void);
+void update_cursor(void);
 
 
 #endif
