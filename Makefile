@@ -14,7 +14,7 @@ ASM_SOURCE=boot.asm
 C_SOURCES=kernel.c idt.c
 ASM_OBJECT=boot.o
 C_OBJECTS=$(C_SOURCES:.c=.o)
-KERNEL=kernel.bin
+KERNEL=kernel
 
 # Default target
 all: $(KERNEL)
@@ -34,9 +34,6 @@ $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 # Clean up the generated files
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
-
-fclean: clean
-	rm -f *~ \#*\# *.bak
 
 # Emulate the kernel
 emulate: $(KERNEL)

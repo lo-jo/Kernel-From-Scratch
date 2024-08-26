@@ -17,8 +17,7 @@ A minimal Kernel from scratch bootable with GRUB, written in ASM and C.
 
 # Basic info
 ### Booting with GRUB
-When you turn on a computer, it loads the BIOS from flash memory, which runs hardware self-tests and initializes components. The BIOS then looks for bootable devices and transfers control to the bootloader on the chosen device. The bootloader's job is to locate the kernel image and load it into memory, while also switching the CPU from real mode (a limited 16-bit mode for backward compatibility) to protected mode (a 32-bit mode with better control over resources). Default way is to load the first sector (512 bytes)
-from disk into the memory location at 0x7c00.
+When you turn on a computer, it loads the BIOS from flash memory, which runs hardware self-tests and initializes components. The BIOS then looks for bootable devices and transfers control to the bootloader on the chosen device. The bootloader's job is to locate the kernel image and load it into memory, while also switching the CPU from real mode (a limited 16-bit mode for backward compatibility) to protected mode (a 32-bit mode with better control over resources). Default way is to load the first sector (512 bytes) from disk into the memory location at 0x7c00.
 
 GRUB, the "Grand Unified Bootloader," is commonly used in GNU/Linux systems. It follows the Multiboot specification, which defines how a kernel should be loaded into memory. By including a Multiboot header at the start of our kernel, we can let GRUB handle the loading process. An added benefit of using GRUB is that it takes care of switching the CPU from real mode to protected mode.
 
@@ -49,7 +48,7 @@ https://en.wikibooks.org/wiki/X86_Assembly/Other_Instructions
 #### Interrupt descriptor Table 
 The Interrupt Descriptor Table, or IDT, is used in order to show the processor what Interrupt Service Routine (ISR) to call to handle either an exception or an 'int' opcode (in assembly). IDT entries are also called by Interrupt Requests whenever a device has completed a request and needs to be serviced. 
 
- In an IDT, the base address specified in the descriptor is actually the address of the Interrupt Service Routine (our keyboard handler) that the processor should call when this interrupt is 'raised' (called).
+In an IDT, the base address specified in the descriptor is actually the address of the Interrupt Service Routine (our keyboard handler) that the processor should call when this interrupt is 'raised' (called).
 https://wiki.osdev.org/Interrupt_Descriptor_Table
 
 https://pdos.csail.mit.edu/6.828/2018/readings/i386/s09_04.htm
