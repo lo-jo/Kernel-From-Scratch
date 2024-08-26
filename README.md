@@ -4,7 +4,7 @@ A minimal Kernel from scratch bootable with GRUB, written in ASM and C.
 
 ## Features
 - Printing to screen
-- Helper functions : ****
+- Helper functions : printk, putchar
 - Scroll and cursor support
 - Color support
 - Keyboard entries
