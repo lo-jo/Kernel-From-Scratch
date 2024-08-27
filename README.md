@@ -28,11 +28,12 @@ Specific positions in memory correspond to certain positions on the screen.
 
 ### Reading from and writing to I/O ports
 I/O ports are accessed using the x86 instructions ```in``` and ```out```
-[In](https://www.gladir.com/LEXIQUE/ASM/in.htm)\
-``` in src, dest ```
+
+- [In](https://www.gladir.com/LEXIQUE/ASM/in.htm) 
+(``` in src, dest ```) \
 The IN instruction almost always has the operands AX and DX (or EAX and EDX) associated with it. DX (src) frequently holds the port address to read, and AX (dest) receives the data from the port.
 
-[Out](https://www.gladir.com/LEXIQUE/ASM/out.htm)
+- [Out](https://www.gladir.com/LEXIQUE/ASM/out.htm) \
 The OUT instruction is very similar to the IN instruction. OUT outputs data from a given register (src) to a given output port (dest).
 
 #### Interrupts

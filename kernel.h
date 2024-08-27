@@ -11,12 +11,14 @@
 #define VIDEO 0xB8000
 
 /******** INTERRUPTS ********/
+// (asm functions) //
 extern unsigned char keyboard_map[128];
 extern void keyboard_handler(void);
 extern char read_port(unsigned short port);
 extern void write_port(unsigned short port, unsigned char data);
 extern void load_idt(unsigned long *idt_ptr);
 
+/******** Keyboard routines ********/
 #define KEY_PRESSED 0x60
 #define KEY_STATUS 0x64
 
@@ -28,8 +30,22 @@ extern void load_idt(unsigned long *idt_ptr);
 #define CMD2 0xA0
 #define DATA2 0xA1
 
-void init_idt(void);
-void update_cursor(void);
 
+/******** SCREEN ********/
+#define HEIGHT 25
+#define WIDTH 80
+
+void clear_screen(void);
+void print_k(int colour, const char *string);
+void putkey(int colour, char c);
+void update_cursor(void);
+void scroll(void);
+int  get_index(void);
+
+/******** IDT ********/
+void init_idt(void);
+
+/******** stdlib dupes ********/
+unsigned char* memcpy(unsigned char *dstptr, const unsigned char *srcptr, int size);
 
 #endif

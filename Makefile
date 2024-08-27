@@ -11,7 +11,7 @@ LDFLAGS=-m elf_i386 -T linker.ld
 
 # Define the source files and output files
 ASM_SOURCE=boot.asm
-C_SOURCES=kernel.c idt.c
+C_SOURCES=kernel.c idt.c screen.c
 ASM_OBJECT=boot.o
 C_OBJECTS=$(C_SOURCES:.c=.o)
 KERNEL=kernel
