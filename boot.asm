@@ -3,25 +3,25 @@ bits 32
 section .multiboot
 align 4
     dd 0x1BADB002            ; Magic number
-    dd 0x00                  ; Flags
+    dd 0x00                  ; Flag for protected mode
     dd -(0x1BADB002 + 0x00)  ; Checksum (magic + flags + checksum = 0)
 
 section .text
 global start
 global keyboard_handler
-global read_port
-global write_port
+global in_port
+global out_port
 global load_idt
 
 extern kmain 	        ; kmain is defined in the C file
-extern keyboard_handler_main
+extern keyboard_routine
 
-read_port:
+in_port:
 	mov edx, [esp + 4]	; argument  (port nbr) pushed to the edx register
 	in al, dx			; Lit un octet dans un port d'entrée/sortie à l'adresse spécifié par le registre DX et met le résultat dans le registre AL.
 	ret
 
-write_port:
+out_port:
 	mov   edx, [esp + 4]    
 	mov   al, [esp + 4 + 4]  
 	out   dx, al  
@@ -34,7 +34,7 @@ load_idt:
 	ret
 
 keyboard_handler:                 
-	call    keyboard_handler_main	; interrupt service routine (ISR)
+	call    keyboard_routine ; interrupt service routine (ISR)
 	iretd
 
 start:

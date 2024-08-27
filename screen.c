@@ -44,10 +44,10 @@ void update_cursor(void)
     *  CRT Control Register of the VGA controller. These
     *  are the high and low bytes of the index that show
     *  where the hardware cursor is to be 'blinking'.*/
-    write_port(0x3D4, 14);
-    write_port(0x3D5, idx >> 8);
-    write_port(0x3D4, 15);
-    write_port(0x3D5, idx);
+    out_port(0x3D4, 14);
+    out_port(0x3D5, idx >> 8);
+    out_port(0x3D4, 15);
+    out_port(0x3D5, idx);
 }
 
 void putkey(int colour, char c){
