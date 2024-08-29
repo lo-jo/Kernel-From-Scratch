@@ -33,7 +33,7 @@ void map_irqs(){
 	out_port(0xA1 , 0x01);
 
 	/* mask interrupts */
-	out_port(0x21 , 0xff);
+	// out_port(0x21 , 0xff);
 	out_port(0xA1 , 0xff);
 }
 

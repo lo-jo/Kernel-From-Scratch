@@ -31,10 +31,12 @@ void keyboard_routine(void) {
 void kmain(void)
 {
 	clear_screen();
-    print_k(PINK, "42\n");
+    print_k(PINK, "42!\n");
 	init_idt();
-	// init keyboard - 0xFD is 11111101 - enables only IRQ1 (keyboard)
+	// // init keyboard - 0xFD is 11111101 - enables only IRQ1 (keyboard)
 	out_port(0x21 , 0xFD);
+	// out_port(0x21 , 0xFD);
 	while(1);
+	// print_k(YELLOW, "uh oh\n");
 	return;
 }

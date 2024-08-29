@@ -1,11 +1,12 @@
 bits 32
 
-section .text
+section .multiboot
 align 4
     dd 0x1BADB002            ; Magic number
     dd 0x00                  ; Flag for protected mode
     dd -(0x1BADB002 + 0x00)  ; Checksum (magic + flags + checksum = 0)
 
+section .text
 global start
 global keyboard_handler
 global in_port
@@ -44,6 +45,7 @@ start:
     hlt		 		         ; Halt the CPU
 
 section .bss
+align 16
 stack_space:
     resb 4096                ; Reserve 4 KB stack space
 stack_top:

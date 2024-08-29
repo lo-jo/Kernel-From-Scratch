@@ -13,6 +13,7 @@ C_SOURCES=kernel.c idt.c screen.c
 ASM_OBJECT=boot.o
 C_OBJECTS=$(C_SOURCES:.c=.o)
 KERNEL=kernel
+ISO_PATH=scripts/kernhell.iso
 
 all: $(KERNEL)
 
@@ -31,7 +32,10 @@ $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
 
-emulate: $(KERNEL)
+emulate: 
 	$(QEMU) -kernel $(KERNEL)
+
+boot:
+	$(QEMU) -cdrom $(ISO_PATH)
 
 .PHONY: all clean fclean emulate

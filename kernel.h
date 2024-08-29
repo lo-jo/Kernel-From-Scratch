@@ -11,8 +11,8 @@
 #define VIDEO 0xB8000
 
 /******** INTERRUPTS ********/
-// (asm functions) //
 extern unsigned char keyboard_map[128];
+// (asm functions) //
 extern void keyboard_handler(void);
 extern char in_port(unsigned short port);
 extern void out_port(unsigned short port, unsigned char data);
