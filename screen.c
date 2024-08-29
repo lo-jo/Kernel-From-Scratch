@@ -83,7 +83,6 @@ void print_k(int colour, const char *string){
     while(*string != 0 ){
         putkey(colour, *string++);
     }
-	// update_cursor();
 }
 
 void clear_screen(){

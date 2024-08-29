@@ -1,11 +1,6 @@
 FROM ubuntu:latest
 
-RUN sudo apt-get update && apt-get install -y grub2-common xorriso 
-
-RUN mkdir -p /shared
-
-COPY ./create_iso.sh /shared/
-COPY ../kernel /shared/
+RUN apt-get update && apt-get install -y grub2-common xorriso grub-pc-bin
 
 VOLUME /shared
 

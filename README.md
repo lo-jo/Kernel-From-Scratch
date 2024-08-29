@@ -4,7 +4,7 @@ A minimal Kernel from scratch bootable with GRUB, written in ASM and C.
 
 ## Features
 - Printing to screen
-- Helper functions (printk, putchar)
+- Helper functions (print single char, print strings)
 - Scroll and cursor support
 - Color support
 - Keyboard entries
@@ -15,7 +15,7 @@ A minimal Kernel from scratch bootable with GRUB, written in ASM and C.
 - i386 architecture
 - Source code has to be no more than 10MB
 
-# Basic info
+# General info
 ### Booting with GRUB
 When you turn on a computer, it loads the BIOS from flash memory, which runs hardware self-tests and initializes components. The BIOS then looks for bootable devices and transfers control to the bootloader on the chosen device. The bootloader's job is to locate the kernel image and load it into memory, while also switching the CPU from real mode (a limited 16-bit mode for backward compatibility) to protected mode (a 32-bit mode with better control over resources). Default way is to load the first sector (512 bytes) from disk into the memory location at ```0x7c00```.
 
@@ -53,22 +53,24 @@ The Interrupt Descriptor Table, or IDT, is used in order to show the processor w
 In an IDT, the base address specified in the descriptor is actually the address of the Interrupt Service Routine (our keyboard handler) that the processor should call when this interrupt is 'raised' (called).
 
 https://wiki.osdev.org/Interrupt_Descriptor_Table
-
 https://pdos.csail.mit.edu/6.828/2018/readings/i386/s09_04.htm
+http://www.osdever.net/bkerndev/Docs/idt.htm
 
 ### Linker
 Our OS can't link the ASM and the C executables together. \
 By using [ld](https://www.math.utah.edu/docs/info/ld_toc.html#SEC3), we can write a linker script that will just do that.
 
-### Creating a disk image
-NOW THAT IS ONE THING THAT I CANT GET TO DO
+### Creating a bootable disk image
+https://wiki.osdev.org/Bare_Bones#Building_a_bootable_cdrom_image
+NOW THAT IS ONE THING THAT I CANT GET TO DO!!!
+
 
 ### System emulation
 Running our kernel is possible with tools such as QEMU.
 ``` make emulate ``` (without GRUB)
 
 ## Resources
-https://wiki.osdev.org/Expanded_Main_Page
-Linker : https://www.math.utah.edu/docs/info/ld_3.html#SEC4
-https://ics.uci.edu/~aburtsev/143A/hw/hw4-boot-into-c/hw4-boot-into-c.html
+OS Bible: https://wiki.osdev.org/Expanded_Main_Page
+Linker: https://www.math.utah.edu/docs/info/ld_3.html#SEC4
+Bootable code tutorial: https://ics.uci.edu/~aburtsev/143A/hw/hw4-boot-into-c/hw4-boot-into-c.html
 i/o devices : https://pages.cs.wisc.edu/~remzi/OSTEP/file-devices.pdf
