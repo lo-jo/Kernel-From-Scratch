@@ -1,6 +1,11 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
+typedef struct {
+    unsigned short limit;  // Size of the IDT in bytes (limit)
+    unsigned long base;   // Base address of the IDT
+} IDTDescriptor;
+
 /********* COLORS ********/
 #define BLACK 0x00
 #define BLUE 0x01
@@ -16,7 +21,8 @@ extern unsigned char keyboard_map[128];
 extern void keyboard_handler(void);
 extern char in_port(unsigned short port);
 extern void out_port(unsigned short port, unsigned char data);
-extern void load_idt(unsigned long *idt_ptr);
+extern void load_idt(IDTDescriptor *idt_ptr);
+// extern void load_idt(unsigned long idt_ptr[2]);
 
 /******** Keyboard routines ********/
 #define KEY_PRESSED 0x60
@@ -47,5 +53,6 @@ void init_idt(void);
 
 /******** stdlib dupes ********/
 unsigned char* memcpy(unsigned char *dstptr, const unsigned char *srcptr, int size);
+void* memset(void* bufptr, int value, int size);
 
 #endif

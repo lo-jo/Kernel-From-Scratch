@@ -2,9 +2,9 @@
 
 struct InterruptDescriptorTable{
    unsigned short offset_1;        // offset bits 0..15
-   unsigned short selector;        // a code segment selector in GDT or LDT
+   unsigned short selector;        // the 16 bit selector of the code segment to jump to when invoking the handler. This will be our kernel code segment.
    unsigned char  zero;            // unused, set to 0
-   unsigned char  type_attributes; // gate type, dpl, and p fields
+   unsigned char  type_attributes; // gate type, Will be set to 110 as we are defining an interrupt gate.
    unsigned short offset_2;        // offset bits 16..31
 };
 
@@ -32,7 +32,7 @@ void map_irqs(){
 	out_port(0x21 , 0x01);
 	out_port(0xA1 , 0x01);
 
-	/* mask interrupts */
+	/* mask all interrupts */
 	// out_port(0x21 , 0xff);
 	out_port(0xA1 , 0xff);
 }
@@ -47,15 +47,24 @@ void map_keyboard_idt(){
 }
 void init_idt(){
 	unsigned long idt_address;
-	unsigned long idt_ptr[2];
+	// unsigned long idt_ptr[2];
+	IDTDescriptor idt_ptr;
 
-	map_keyboard_idt();
-	map_irqs();
+	memset(&idt, 0, sizeof(struct InterruptDescriptorTable) * 256);
+	map_keyboard_idt(); // 1. set up IDT entry for keyboard
+	map_irqs();			// 2. init and config PICS
 
+	// 3. set IDT pointer
 	/* fill the IDT descriptor */
-	idt_address = (unsigned long)idt;
-	idt_ptr[0] = (sizeof (struct InterruptDescriptorTable) * 256) + ((idt_address & 0xffff) << 16);
-	idt_ptr[1] = idt_address >> 16 ; //The lower 5-bits of the access byte is always set to 01110 in binary. This is 14 in decimal.
+	idt_address = (unsigned long)&idt;
+	// idt_ptr[0] = (sizeof (struct InterruptDescriptorTable) * 256) -1 + ((idt_address & 0xffff) << 16);
+	// idt_ptr[1] = idt_address >> 16 ; //The lower 5-bits of the access byte is always set to 01110 in binary. This is 14 in decimal.
+	idt_ptr.limit = sizeof(struct InterruptDescriptorTable) * 256 - 1;
+	idt_ptr.base = idt_address;
+
+	//4. LOAD IDT
     /* This exists in 'start.asm', and is used to load our IDT */
-	load_idt(idt_ptr);
+	load_idt(&idt_ptr);
+	out_port(0x21 , 0xFD);
+	// // UNMASK IRQ1 (keybard) - 0xFD is 11111101 - enables only IRQ1 (keyboard)
 }
