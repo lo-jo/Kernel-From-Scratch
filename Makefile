@@ -4,8 +4,8 @@ LD=ld
 QEMU=qemu-system-i386
 
 # Compilation flags
-NASMFLAGS=-f elf32
-GCCFLAGS=-m32 -c -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs
+NASMFLAGS=-f elf32 -g -F dwarf
+GCCFLAGS=-m32 -c -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs -g3
 LDFLAGS=-m elf_i386 -T linker.ld
 
 ASM_SOURCE=boot.asm
@@ -28,14 +28,15 @@ $(ASM_OBJECT): $(ASM_SOURCE)
 # Link the object files
 $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 	$(LD) $(LDFLAGS) -o $(KERNEL) $(ASM_OBJECT) $(C_OBJECTS)
+	cp ./kernel ./scripts
 
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
 
 emulate: 
-	$(QEMU) -kernel $(KERNEL)
+	$(QEMU) -s -S -kernel $(KERNEL)
 
 boot:
-	$(QEMU) -cdrom $(ISO_PATH)
+	$(QEMU) -s -S -d int -cdrom $(ISO_PATH)
 
 .PHONY: all clean fclean emulate

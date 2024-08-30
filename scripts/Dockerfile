@@ -6,7 +6,4 @@ VOLUME /shared
 
 WORKDIR /shared
 
-RUN chmod +x ./create_iso.sh
-RUN ./create_iso.sh
-
-CMD [ "/bin/sh" ]
+ENTRYPOINT [ "/bin/sh", "-c", "./create_iso.sh && exec sh" ]
