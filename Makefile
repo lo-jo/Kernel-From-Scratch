@@ -12,7 +12,7 @@ ASM_SOURCE=boot.asm
 C_SOURCES=kernel.c idt.c screen.c
 ASM_OBJECT=boot.o
 C_OBJECTS=$(C_SOURCES:.c=.o)
-KERNEL=kernel
+KERNEL=kernel-100
 ISO_PATH=scripts/kernhell.iso
 
 all: $(KERNEL)
@@ -28,15 +28,21 @@ $(ASM_OBJECT): $(ASM_SOURCE)
 # Link the object files
 $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 	$(LD) $(LDFLAGS) -o $(KERNEL) $(ASM_OBJECT) $(C_OBJECTS)
-	cp ./kernel ./scripts
+	cp ./$(KERNEL) ./scripts
 
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
 
 emulate: 
-	$(QEMU) -s -S -kernel $(KERNEL)
+	$(QEMU) -kernel $(KERNEL)
 
 boot:
+	$(QEMU) -cdrom $(ISO_PATH)
+
+debug-emulate:
+	$(QEMU) -s -S -kernel $(KERNEL)
+
+debug-boot:
 	$(QEMU) -s -S -d int -cdrom $(ISO_PATH)
 
 .PHONY: all clean fclean emulate
