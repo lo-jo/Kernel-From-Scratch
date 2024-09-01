@@ -47,5 +47,5 @@ start:
 section .bss
 align 16
 stack_space:
-    resb 4096                ; Reserve 4 KB stack space
+    resb 8192                ; Reserve 4 KB stack space
 stack_top:
