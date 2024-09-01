@@ -15,6 +15,9 @@ C_OBJECTS=$(C_SOURCES:.c=.o)
 KERNEL=kernel-100
 ISO_PATH=scripts/kernhell.iso
 
+LOG_FILES_DIRECTORY=./qemudebuglogs
+QEMU_LOG_FILE=$(shell date +'%Y%m%d_%H%M%S')_qemu_debug.log
+
 all: $(KERNEL)
 
 # Assemble the ASM file
@@ -29,9 +32,15 @@ $(ASM_OBJECT): $(ASM_SOURCE)
 $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 	$(LD) $(LDFLAGS) -o $(KERNEL) $(ASM_OBJECT) $(C_OBJECTS)
 	cp ./$(KERNEL) ./scripts
+	docker compose -f docker-compose.yml up -d --build
 
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
+	rm -f ./scripts/$(KERNEL)
+	#rm -rf ./scripts/isodir/ 
+	#rm -f ./scripts/kernhell.iso
+	sudo rm -rf ./scripts/isodir/ 
+	sudo rm -f ./scripts/kernhell.iso
 
 emulate: 
 	$(QEMU) -kernel $(KERNEL)
@@ -39,10 +48,16 @@ emulate:
 boot:
 	$(QEMU) -cdrom $(ISO_PATH)
 
+log-emulate:
+	$(QEMU) -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -kernel $(ISO_PATH)
+
+log-boot:
+	$(QEMU) -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -no-reboot -cdrom $(ISO_PATH)
+
 debug-emulate:
-	$(QEMU) -s -S -kernel $(KERNEL)
+	$(QEMU) -s -S -d int -kernel $(KERNEL)
 
 debug-boot:
-	$(QEMU) -s -S -d int -cdrom $(ISO_PATH)
+	$(QEMU) -s -S -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -no-reboot -cdrom $(ISO_PATH)
 
-.PHONY: all clean fclean emulate
+.PHONY: all clean fclean emulate boot log-emulate log-boot debug-emulate debug-boot
