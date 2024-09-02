@@ -6,5 +6,5 @@ VOLUME /shared
 
 WORKDIR /shared
 
-ENTRYPOINT [ "/bin/sh", "-c", "./create_iso.sh" ]
-#ENTRYPOINT [ "/bin/sh", "-c", "./create_iso.sh && exec sh" ] // If you want to keep the container alive
+#ENTRYPOINT [ "/bin/sh", "-c", "./create_iso.sh" ]
+ENTRYPOINT [ "/bin/sh", "-c", "./create_iso.sh && exec sh" ] // If you want to keep the container alive

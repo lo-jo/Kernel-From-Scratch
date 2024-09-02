@@ -32,12 +32,17 @@ load_idt:
 	lidt [edx]			; load interrupt description table
 	sti 				; Set Interrupt Flag to 1 (on)
 	ret
+  
+enable_interrupts:
+  sti
+  ret
 
 keyboard_handler:                 
 	call    keyboard_routine ; interrupt service routine (ISR)
 	iretd
 
 start:
+    mov esp, stack_top       ; Set stack pointer to the top of the stack
     cli 			         ; Clears the interrupt flag
     mov esp, stack_top       ; Set stack pointer to the top of the stack
     push ebx                 ; Multiboot boot info is in ebx
@@ -47,5 +52,5 @@ start:
 section .bss
 align 16
 stack_space:
-    resb 8192                ; Reserve 4 KB stack space
+    resb 4096                ; Reserve 4 KB stack space
 stack_top:

@@ -37,10 +37,12 @@ $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
 	rm -f ./scripts/$(KERNEL)
-	#rm -rf ./scripts/isodir/ 
-	#rm -f ./scripts/kernhell.iso
-	sudo rm -rf ./scripts/isodir/ 
-	sudo rm -f ./scripts/kernhell.iso
+	rm -rf ./scripts/isodir/ 
+	rm -f ./scripts/kernhell.iso
+	docker stop \$(docker ps -qa) 
+	docker rm -f \$(docker ps -qa) 
+	#sudo rm -rf ./scripts/isodir/ 
+	#sudo rm -f ./scripts/kernhell.iso
 
 emulate: 
 	$(QEMU) -kernel $(KERNEL)

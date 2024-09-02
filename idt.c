@@ -6,9 +6,14 @@ struct InterruptDescriptorTable{
    unsigned char  zero;            // unused, set to 0
    unsigned char  type_attributes; // gate type, dpl, and p fields
    unsigned short offset_2;        // offset bits 16..31
-};
+} __attribute__ ((packed));
 
 struct InterruptDescriptorTable idt[256];
+
+struct idt_ptr {
+  unsigned short  limit;
+  unsigned int    base;
+} __attribute__ ((packed));
 
 // map Interrupt Requests
 void map_irqs(){
@@ -62,21 +67,21 @@ void map_irqs(){
 
 void map_keyboard_idt(){
 	/* populate IDT entry of keyboard's interrupt */
-	idt[DATA1].offset_1 = (unsigned int)keyboard_handler & 0xffff; // lower 16 bits of address
+	idt[DATA1].offset_1 = (unsigned long)keyboard_handler & 0xffff; // lower 16 bits of address
 	idt[DATA1].selector = 0x08; // kernel segment in protected mode
 	idt[DATA1].zero = 0;
 	idt[DATA1].type_attributes = 0x8e; /* INTERRUPT_GATE */
-	idt[DATA1].offset_2 = ((unsigned int)keyboard_handler & 0xffff0000) >> 16;
+	idt[DATA1].offset_2 = ((unsigned long)keyboard_handler & 0xffff0000) >> 16;
 }
 void init_idt(){
-	unsigned int idt_address;
-	unsigned int idt_ptr[2];
+	unsigned long idt_address;
+	unsigned long idt_ptr[2];
 
 	map_keyboard_idt();
 	map_irqs();
 
 	/* fill the IDT descriptor */
-	idt_address = (unsigned int)idt;
+	idt_address = (unsigned long)idt;
 	idt_ptr[0] = (sizeof (struct InterruptDescriptorTable) * 256) + ((idt_address & 0xffff) << 16);
 	idt_ptr[1] = idt_address >> 16 ; //The lower 5-bits of the access byte is always set to 01110 in binary. This is 14 in decimal.
     /* This exists in 'start.asm', and is used to load our IDT */

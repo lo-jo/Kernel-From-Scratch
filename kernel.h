@@ -17,6 +17,7 @@ extern void keyboard_handler(void);
 extern char in_port(unsigned short port);
 extern void out_port(unsigned short port, unsigned char data);
 extern void load_idt(unsigned long *idt_ptr);
+extern void renable_interrupts(void);
 
 /******** Keyboard routines ********/
 #define KEY_PRESSED 0x60
