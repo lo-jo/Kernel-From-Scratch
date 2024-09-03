@@ -56,6 +56,10 @@ void putkey(int colour, char c){
 	if (c == '\b'){
 		if (pos_x != 0){
         	pos_x--;
+		      index = (unsigned short *)VIDEO + get_index();
+          c = ' ';
+          colour = WHITE;
+		      *index = c | colour << 8;
 		}
 	}
 	else if (c == '\n'){

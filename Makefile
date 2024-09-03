@@ -39,8 +39,8 @@ clean:
 	rm -f ./scripts/$(KERNEL)
 	rm -rf ./scripts/isodir/ 
 	rm -f ./scripts/kernhell.iso
-	docker stop \$(docker ps -qa) 
-	docker rm -f \$(docker ps -qa) 
+	docker stop $(docker ps -qa) 
+	docker rm -f $(docker ps -qa) 
 	#sudo rm -rf ./scripts/isodir/ 
 	#sudo rm -f ./scripts/kernhell.iso
 
