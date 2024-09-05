@@ -32,17 +32,21 @@ $(ASM_OBJECT): $(ASM_SOURCE)
 $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 	$(LD) $(LDFLAGS) -o $(KERNEL) $(ASM_OBJECT) $(C_OBJECTS)
 	cp ./$(KERNEL) ./scripts
-	#docker compose -f docker-compose.yml up -d --build
+	docker compose -f docker-compose.yml up -d --build
 
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
+
+fclean: clean
 	rm -f ./scripts/$(KERNEL)
 	rm -rf ./scripts/isodir/ 
 	rm -f ./scripts/kernhell.iso
 	docker stop $(docker ps -qa) 
 	docker rm -f $(docker ps -qa) 
-	#sudo rm -rf ./scripts/isodir/ 
-	#sudo rm -f ./scripts/kernhell.iso
+	sudo rm -rf ./scripts/isodir/ 
+	sudo rm -f ./scripts/kernhell.iso
+
+re: fclean all
 
 emulate: 
 	$(QEMU) -kernel $(KERNEL)
@@ -62,4 +66,4 @@ debug-emulate:
 debug-boot:
 	$(QEMU) -s -S -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -no-reboot -cdrom $(ISO_PATH)
 
-.PHONY: all clean fclean emulate boot log-emulate log-boot debug-emulate debug-boot
+.PHONY: all clean fclean re emulate boot log-emulate log-boot debug-emulate debug-boot

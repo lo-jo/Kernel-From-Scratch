@@ -13,10 +13,7 @@ void putkey(int colour, char c, char *screen, unsigned int screen_nb){
 		}
 	}
   else if (c < 0  && c > -10)
-  {
     switch_screen((unsigned int)(-c - 1));
-    //putkey(WHITE, 'a', (char *)VIDEO, screen_nb);
-  }
 	else if (c == '\n'){
         indexes[screen_nb].pos_x = 0;
         indexes[screen_nb].pos_y++;
@@ -34,8 +31,6 @@ void putkey(int colour, char c, char *screen, unsigned int screen_nb){
     scroll();
 	update_cursor();
 }
-
-
 
 // https://wiki.osdev.org/Printing_To_Screen
 void print_k(int colour, const char *string, char *screen, unsigned int screen_nb){

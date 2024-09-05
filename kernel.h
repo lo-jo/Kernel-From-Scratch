@@ -72,6 +72,4 @@ extern unsigned int active_screen;
 extern unsigned int pos_x;
 extern unsigned int pos_y;
 
-
-
 #endif

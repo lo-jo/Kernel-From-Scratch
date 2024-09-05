@@ -1,6 +1,8 @@
 #include "kernel.h"
 #include "keyboard_map.h"
 
+struct s_index indexes[SCREEN_NB];
+struct s_screens screens[SCREEN_NB];
 
 void* memset(void* bufptr, int value, int size) {
 	unsigned char* buf = (unsigned char*) bufptr;
@@ -35,17 +37,26 @@ void keyboard_routine(void) {
 	}
 }
 
+void  init_data(void)
+{
+  for(unsigned int i = 0; i < SCREEN_NB; i++){
+    memset(&screens[i], 0, HEIGHT * WIDTH * 2);
+    memset(&indexes[i], 0, 1);
+    clear_screen(screens[i].screen);
+    print_k(PINK, "42! - Screen n ", screens[i].screen, i);
+    putkey(PINK, (char)((i + 1) + 48), screens[i].screen, i);
+    putkey(PINK, '\n', screens[i].screen, i);
+  }
+  memcpy((void *)VIDEO, screens[0].screen, WIDTH * HEIGHT * 2);
+  return ;
+}
+
 void kmain(void)
 {
   init_data();
-	//init_idt();
-	// // init keyboard - 0xFD is 11111101 - enables only IRQ1 (keyboard)
-	//out_port(0x21 , 0xFD);
-	// out_port(0x21 , 0xFD);
   
 	while(1){
     keyboard_routine();
   }
-	// print_k(YELLOW, "uh oh\n");
 	return;
 }

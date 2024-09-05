@@ -1,8 +1,5 @@
 #include "kernel.h"
 
-unsigned int pos_x = 0;
-unsigned int pos_y = 0;
-
 unsigned int  active_screen = 0;
 
 int get_index(unsigned int screen_nb){
@@ -56,8 +53,8 @@ void switch_screen(unsigned int screen_nb)
 {
   if (active_screen == screen_nb)
     return ;
-  memcpy(screens[active_screen].screen, (void *)VIDEO, WIDTH * HEIGHT);
+  memcpy(screens[active_screen].screen, (void *)VIDEO, WIDTH * HEIGHT * 2);
   active_screen = screen_nb;
-  memcpy((void *)VIDEO, screens[active_screen].screen, WIDTH * HEIGHT);
+  memcpy((void *)VIDEO, screens[active_screen].screen, WIDTH * HEIGHT * 2);
   return ; 
 }
