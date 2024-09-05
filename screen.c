@@ -5,12 +5,12 @@ unsigned int pos_y = 0;
 
 unsigned int  active_screen = 0;
 
-int get_index(){
+int get_index(unsigned int screen_nb){
 	unsigned short index;
 
 	/* equation for finding the index in a linear chunk of memory:
     *  Index = [(y * width) + x] */
-	index = indexes[active_screen].pos_y * 80 + indexes[active_screen].pos_x;
+	index = indexes[screen_nb].pos_y * 80 + indexes[screen_nb].pos_x;
 
 	return index;
 }
@@ -40,7 +40,7 @@ void scroll(void)
 void update_cursor(void)
 {
     unsigned idx;
-    idx = get_index();
+    idx = get_index(active_screen);
 
     /* This sends a command to indicies 14 and 15 in the
     *  CRT Control Register of the VGA controller. These

@@ -6,7 +6,7 @@ void putkey(int colour, char c, char *screen, unsigned int screen_nb){
 	if (c == '\b'){
 		if (indexes[screen_nb].pos_x != 0){
         	indexes[screen_nb].pos_x--;
-		      index = (unsigned short *)screen + get_index();
+		      index = (unsigned short *)screen + get_index(screen_nb);
           c = ' ';
           colour = WHITE;
 		      *index = c | colour << 8;
@@ -22,7 +22,7 @@ void putkey(int colour, char c, char *screen, unsigned int screen_nb){
         indexes[screen_nb].pos_y++;
 	}
 	else{
-		index = (unsigned short *)screen + get_index();
+		index = (unsigned short *)screen + get_index(screen_nb);
 		*index = c | colour << 8;
 		indexes[screen_nb].pos_x++;
 	}

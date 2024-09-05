@@ -43,7 +43,7 @@ void putkey(int colour, char c, char *screen, unsigned int screen_nb);
 void update_cursor(void);
 void scroll(void);
 void switch_screen(unsigned int screen_nb);
-int  get_index(void);
+int  get_index(unsigned int screen_nb);
 void  init_data(void);
 
 /******** IDT ********/
