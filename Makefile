@@ -9,7 +9,7 @@ GCCFLAGS=-m32 -c -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs -g3
 LDFLAGS=-m elf_i386 -T linker.ld
 
 ASM_SOURCE=boot.asm
-C_SOURCES=kernel.c idt.c screen.c
+C_SOURCES=kernel.c idt.c screen.c init_data.c print_utils.c
 ASM_OBJECT=boot.o
 C_OBJECTS=$(C_SOURCES:.c=.o)
 KERNEL=kernel-100
@@ -32,7 +32,7 @@ $(ASM_OBJECT): $(ASM_SOURCE)
 $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 	$(LD) $(LDFLAGS) -o $(KERNEL) $(ASM_OBJECT) $(C_OBJECTS)
 	cp ./$(KERNEL) ./scripts
-	docker compose -f docker-compose.yml up -d --build
+	#docker compose -f docker-compose.yml up -d --build
 
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)

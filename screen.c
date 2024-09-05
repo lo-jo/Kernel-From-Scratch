@@ -3,12 +3,14 @@
 unsigned int pos_x = 0;
 unsigned int pos_y = 0;
 
+unsigned int  active_screen = 0;
+
 int get_index(){
 	unsigned short index;
 
 	/* equation for finding the index in a linear chunk of memory:
     *  Index = [(y * width) + x] */
-	index = pos_y * 80 + pos_x;
+	index = indexes[active_screen].pos_y * 80 + indexes[active_screen].pos_x;
 
 	return index;
 }
@@ -17,10 +19,10 @@ void scroll(void)
 {
     unsigned temp;
 
-    if(pos_y >= 25)
+    if(indexes[active_screen].pos_y >= 25)
     {
         /* select chunk of memory from screen */
-        temp = pos_y - 25 + 1;
+        temp = indexes[active_screen].pos_y - 25 + 1;
         /* copy it into screen */
         memcpy((unsigned char *)VIDEO, (unsigned char *)VIDEO + temp * 80 * 2, (25 - temp) * 80 * 2);
 
@@ -31,7 +33,7 @@ void scroll(void)
             buffer[i] = ' ';
             buffer[i+1] = WHITE;
         }
-        pos_y = 25 - 1;
+        indexes[active_screen].pos_y = 25 - 1;
     }
 }
 
@@ -50,53 +52,12 @@ void update_cursor(void)
     out_port(0x3D5, idx);
 }
 
-void putkey(int colour, char c){
-	unsigned short *index;
-
-	if (c == '\b'){
-		if (pos_x != 0){
-        	pos_x--;
-		      index = (unsigned short *)VIDEO + get_index();
-          c = ' ';
-          colour = WHITE;
-		      *index = c | colour << 8;
-		}
-	}
-	else if (c == '\n'){
-        pos_x = 0;
-        pos_y++;
-	}
-	else{
-		index = (unsigned short *)VIDEO + get_index();
-		*index = c | colour << 8;
-		pos_x++;
-	}
-	if(pos_x >= 80)
-    {
-        pos_x = 0;
-        pos_y++;
-    }
-    scroll();
-	update_cursor();
-}
-
-// https://wiki.osdev.org/Printing_To_Screen
-void print_k(int colour, const char *string){
-    volatile char *video = (volatile char*)VIDEO;
-
-    while(*string != 0 ){
-        putkey(colour, *string++);
-    }
-}
-
-void clear_screen(){
-	volatile char *video = (volatile char*)VIDEO;
-	unsigned int j = 0;
-
-	// there are 25 lines each of 80 columns; each element takes 2 bytes
-	while(j < 80 * 25 * 2) {
-		video[j] = ' ';
-		video[j+1] = WHITE; 		
-		j += 2;
-	}
+void switch_screen(unsigned int screen_nb)
+{
+  if (active_screen == screen_nb)
+    return ;
+  memcpy(screens[active_screen].screen, (void *)VIDEO, WIDTH * HEIGHT);
+  active_screen = screen_nb;
+  memcpy((void *)VIDEO, screens[active_screen].screen, WIDTH * HEIGHT);
+  return ; 
 }

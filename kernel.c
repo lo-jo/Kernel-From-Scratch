@@ -1,6 +1,14 @@
 #include "kernel.h"
 #include "keyboard_map.h"
 
+
+void* memset(void* bufptr, int value, int size) {
+	unsigned char* buf = (unsigned char*) bufptr;
+	for (int i = 0; i < size; i++)
+		buf[i] = (unsigned char) value;
+	return bufptr;
+}
+
 unsigned char* memcpy(unsigned char *dstptr, const unsigned char *srcptr, int size) {
 	unsigned char* dst = (unsigned char*) dstptr;
 	const unsigned char* src = (const unsigned char*) srcptr;
@@ -23,14 +31,13 @@ void keyboard_routine(void) {
 		keycode = in_port(KEY_PRESSED);
 		if(keycode < 0)
 			return;
-		putkey(GREEN, keyboard_map[keycode]);
+		putkey(GREEN, keyboard_map[keycode], (char *)VIDEO, active_screen);
 	}
 }
 
 void kmain(void)
 {
-	clear_screen();
-    print_k(PINK, "42! J ARRIVE A ECRIRE EN MAJ\n");
+  init_data();
 	//init_idt();
 	// // init keyboard - 0xFD is 11111101 - enables only IRQ1 (keyboard)
 	//out_port(0x21 , 0xFD);

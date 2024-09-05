@@ -35,18 +35,43 @@ extern void renable_interrupts(void);
 /******** SCREEN ********/
 #define HEIGHT 25
 #define WIDTH 80
+#define SCREEN_NB 9
 
-void clear_screen(void);
-void print_k(int colour, const char *string);
-void putkey(int colour, char c);
+void clear_screen(char *screen);
+void print_k(int colour, const char *string, char *screen, unsigned int screen_nb);
+void putkey(int colour, char c, char *screen, unsigned int screen_nb);
 void update_cursor(void);
 void scroll(void);
+void switch_screen(unsigned int screen_nb);
 int  get_index(void);
+void  init_data(void);
 
 /******** IDT ********/
 void init_idt(void);
 
 /******** stdlib dupes ********/
+void* memset(void* bufptr, int value, int size);
 unsigned char* memcpy(unsigned char *dstptr, const unsigned char *srcptr, int size);
+
+/******** screen variables ********/
+
+struct s_screens{
+  unsigned char screen[HEIGHT * WIDTH * 2];
+};
+
+struct s_index{
+  unsigned int pos_x;
+  unsigned int pos_y;
+};
+
+extern struct s_index indexes[SCREEN_NB];
+extern struct s_screens screens[SCREEN_NB];
+
+extern unsigned int active_screen; 
+
+extern unsigned int pos_x;
+extern unsigned int pos_y;
+
+
 
 #endif
