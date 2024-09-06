@@ -1,0 +1,7 @@
+services:
+  kfs:
+    container_name: kfs_isobuilder
+    build: ./scripts
+    image: kfs_isobuilder
+    volumes:
+      - ./scripts:/shared
