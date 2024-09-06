@@ -8,24 +8,32 @@ NASMFLAGS=-f elf32 -g -F dwarf
 GCCFLAGS=-m32 -c -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs -g3
 LDFLAGS=-m elf_i386 -T linker.ld
 
-ASM_SOURCE=boot.asm
-C_SOURCES=kernel.c idt.c screen.c print_utils.c
-ASM_OBJECT=boot.o
-C_OBJECTS=$(C_SOURCES:.c=.o)
-KERNEL=kernel-100
+# Directories
+OBJ_DIR=obj
+LOG_FILES_DIRECTORY=./qemudebuglogs
 ISO_PATH=scripts/kernhell.iso
 
-LOG_FILES_DIRECTORY=./qemudebuglogs
+# Sources and Objects
+ASM_SOURCE=boot.asm
+C_SOURCES=kernel.c screen.c print_utils.c
+ASM_OBJECT=$(OBJ_DIR)/boot.o
+C_OBJECTS=$(addprefix $(OBJ_DIR)/, $(C_SOURCES:.c=.o))
+KERNEL=kernel-100
+
 QEMU_LOG_FILE=$(shell date +'%Y%m%d_%H%M%S')_qemu_debug.log
 
 all: $(KERNEL)
 
-# Assemble the ASM file
-$(ASM_OBJECT): $(ASM_SOURCE)
+# Ensure object directory exists
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+# Assemble the ASM file into the object directory
+$(ASM_OBJECT): $(ASM_SOURCE) $(OBJ_DIR)
 	$(NASM) $(NASMFLAGS) $(ASM_SOURCE) -o $(ASM_OBJECT)
 
-# Compile each C source file into an object file
-%.o: %.c
+# Compile each C source file into the object directory
+$(OBJ_DIR)/%.o: %.c $(OBJ_DIR)
 	$(GCC) $(GCCFLAGS) $< -o $@
 
 # Link the object files
@@ -36,6 +44,7 @@ $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
+	rm -rf $(OBJ_DIR)
 	docker compose -f docker-compose.yml down
 
 fclean: clean

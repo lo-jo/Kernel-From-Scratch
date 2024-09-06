@@ -23,9 +23,6 @@ void keyboard_routine(void) {
 	unsigned char scancode;
 	char keycode;
 
-	/* write EOI */
-	//out_port(0x20, 0x20);
-
 	/* Read from the keyboard's data buffer */
 	scancode = in_port(KEY_STATUS);
 	/* Lowest bit of key status will be set if buffer is not empty */
@@ -47,16 +44,16 @@ void  init_data(void)
     putkey(PINK, (char)((i + 1) + 48), screens[i].screen, i);
     putkey(PINK, '\n', screens[i].screen, i);
   }
-  memcpy((void *)VIDEO, screens[0].screen, WIDTH * HEIGHT * 2);
-  return ;
+  	memcpy((void *)VIDEO, screens[0].screen, WIDTH * HEIGHT * 2);
+  	return ;
 }
 
 void kmain(void)
 {
-  init_data();
+	init_data();
   
 	while(1){
     keyboard_routine();
-  }
+  	}
 	return;
 }

@@ -11,7 +11,6 @@ global start
 global keyboard_handler
 global in_port
 global out_port
-global load_idt
 
 extern kmain 	        ; kmain is defined in the C file
 extern keyboard_routine
@@ -27,27 +26,12 @@ out_port:
 	out   dx, al  
 	ret
 
-load_idt:
-	mov edx, [esp + 4] 	; port
-	lidt [edx]			; load interrupt description table
-	sti 				; Set Interrupt Flag to 1 (on)
-	ret
-  
-enable_interrupts:
-  sti
-  ret
-
-keyboard_handler:                 
-	call    keyboard_routine ; interrupt service routine (ISR)
-	iretd
-
 start:
     mov esp, stack_top       ; Set stack pointer to the top of the stack
     cli 			         ; Clears the interrupt flag
     mov esp, stack_top       ; Set stack pointer to the top of the stack
     push ebx                 ; Multiboot boot info is in ebx
     call kmain               ; Call kernel main function
-    hlt		 		         ; Halt the CPU
 
 section .bss
 align 16
