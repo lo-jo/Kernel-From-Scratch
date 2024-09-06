@@ -9,7 +9,7 @@ GCCFLAGS=-m32 -c -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs -g3
 LDFLAGS=-m elf_i386 -T linker.ld
 
 ASM_SOURCE=boot.asm
-C_SOURCES=kernel.c idt.c screen.c init_data.c print_utils.c
+C_SOURCES=kernel.c idt.c screen.c print_utils.c
 ASM_OBJECT=boot.o
 C_OBJECTS=$(C_SOURCES:.c=.o)
 KERNEL=kernel-100
@@ -36,15 +36,12 @@ $(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
 
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
+	docker compose -f docker-compose.yml down
 
 fclean: clean
 	rm -f ./scripts/$(KERNEL)
 	rm -rf ./scripts/isodir/ 
 	rm -f ./scripts/kernhell.iso
-	docker stop $(docker ps -qa) 
-	docker rm -f $(docker ps -qa) 
-	sudo rm -rf ./scripts/isodir/ 
-	sudo rm -f ./scripts/kernhell.iso
 
 re: fclean all
 
