@@ -8,12 +8,12 @@ align 4
 
 section .text
 global start
-global keyboard_handler
 global in_port
 global out_port
+global gdt_flush
 
 extern kmain 	        ; kmain is defined in the C file
-extern keyboard_routine
+extern gp               ; gdt ptr defined in gdt.c
 
 in_port:
 	mov edx, [esp + 4]	; argument  (port nbr) pushed to the edx register
@@ -25,6 +25,20 @@ out_port:
 	mov   al, [esp + 4 + 4]  
 	out   dx, al  
 	ret
+
+gdt_flush:
+    lgdt [gp]
+    mov ax, 0x10        ; segment selector
+    mov ds, ax          ; data segment register
+    mov es, ax          ; extra segment register
+    mov fs, ax          ; additional segment
+    mov gs, ax          ; additional segment
+    mov ss, ax
+    jmp 0x08:flush2
+
+flush2:
+    ret
+
 
 start:
     mov esp, stack_top       ; Set stack pointer to the top of the stack

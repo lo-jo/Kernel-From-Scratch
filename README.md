@@ -82,3 +82,6 @@ Tutorials:\
 https://ics.uci.edu/~aburtsev/143A/hw/hw4-boot-into-c/hw4-boot-into-c.html
 https://wiki.osdev.org/Bare_Bones\
 i/o devices : https://pages.cs.wisc.edu/~remzi/OSTEP/file-devices.pdf
+
+ram kernel mode
+https://www.cse.iitb.ac.in/~mythili/os/notes/old-notes/notes-kernel-mode.txt

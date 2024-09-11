@@ -1,5 +1,19 @@
 #include "kernel.h"
 
+
+void print_hex(unsigned int value, int color){
+	char *hex = "0123456789ABCDEF";
+	char buffer[9];
+	int i;
+
+	buffer[8] = 0;
+	for(i = 7; i >= 0; i--){
+		buffer[i] = hex[value & 0xF];
+		value >>= 4;
+	}
+	print_k(color, buffer, (char *)VIDEO, active_screen);
+}
+
 void putkey(int colour, char c, char *screen, unsigned int screen_nb){
 	unsigned short *index;
 

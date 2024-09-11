@@ -19,6 +19,10 @@ extern void out_port(unsigned short port, unsigned char data);
 extern void load_idt(unsigned long *idt_ptr);
 extern void renable_interrupts(void);
 
+/******** GDT ********/
+extern void gdt_flush(void);
+void        init_gdt(void);
+
 /******** Keyboard routines ********/
 #define KEY_PRESSED 0x60
 #define KEY_STATUS 0x64
@@ -45,6 +49,7 @@ void scroll(void);
 void switch_screen(unsigned int screen_nb);
 int  get_index(unsigned int screen_nb);
 void  init_data(void);
+void print_hex(unsigned int value, int color);
 
 /******** IDT ********/
 void init_idt(void);

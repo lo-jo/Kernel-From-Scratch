@@ -51,9 +51,9 @@ void  init_data(void)
 void kmain(void)
 {
 	init_data();
-  
+	init_gdt();
 	while(1){
-    keyboard_routine();
+    	keyboard_routine();
   	}
 	return;
 }
