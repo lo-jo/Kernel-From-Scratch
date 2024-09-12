@@ -6,6 +6,10 @@ align 4
     dd 0x00                  ; Flag for protected mode
     dd -(0x1BADB002 + 0x00)  ; Checksum (magic + flags + checksum = 0)
 
+section .data
+
+
+
 section .text
 global start
 global in_port
@@ -49,11 +53,10 @@ trace_stack:
 
 start:
     mov esp, stack_top       ; Set stack pointer to the top of the stack
-    cli 			         ; Clears the interrupt flag
     push ebx                 ; Multiboot boot info is in ebx
     call kmain               ; Call kernel main function
 
 section .bss
 stack_space:
-    resb 4096                ; Reserve 4 KB stack space
+    resb 8092                ; Reserve 4 KB stack space
 stack_top:

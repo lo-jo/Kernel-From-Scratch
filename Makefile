@@ -28,6 +28,10 @@ all: $(KERNEL)
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
+# Ensure object directory exists
+$(LOG_FILES_DIRECTORY):
+	mkdir -p $(LOG_FILES_DIRECTORY)
+
 # Assemble the ASM file into the object directory
 $(ASM_OBJECT): $(ASM_SOURCE) $(OBJ_DIR)
 	$(NASM) $(NASMFLAGS) $(ASM_SOURCE) -o $(ASM_OBJECT)
@@ -37,7 +41,7 @@ $(OBJ_DIR)/%.o: %.c $(OBJ_DIR)
 	$(GCC) $(GCCFLAGS) $< -o $@
 
 # Link the object files
-$(KERNEL): $(ASM_OBJECT) $(C_OBJECTS)
+$(KERNEL): $(ASM_OBJECT) $(C_OBJECTS) $(LOG_FILES_DIRECTORY)
 	$(LD) $(LDFLAGS) -o $(KERNEL) $(ASM_OBJECT) $(C_OBJECTS)
 	cp ./$(KERNEL) ./scripts
 	docker compose -f docker-compose.yml up -d --build
@@ -61,7 +65,7 @@ boot:
 	$(QEMU) -cdrom $(ISO_PATH)
 
 log-emulate:
-	$(QEMU) -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -kernel $(ISO_PATH)
+	$(QEMU) -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -kernel $(KERNEL)
 
 log-boot:
 	$(QEMU) -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -no-reboot -cdrom $(ISO_PATH)
