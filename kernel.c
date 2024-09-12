@@ -52,6 +52,7 @@ void kmain(void)
 {
 	init_data();
 	init_gdt();
+	// print_stack();
 	while(1){
     	keyboard_routine();
   	}

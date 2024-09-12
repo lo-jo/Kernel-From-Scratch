@@ -1,8 +1,34 @@
 #include "kernel.h"
 
+void print_stack(void) {
+    unsigned long esp = 0;
+    unsigned long ebp = 0;
+    unsigned long *ptr;
+	print_k(YELLOW, "Printing stack\n", (char *)VIDEO, active_screen);
+    // Call trace_stack to properly initialize esp and ebp
+    trace_stack(&esp, &ebp);
+
+    print_k(GREEN, "ESP:\n", (char *)VIDEO, active_screen);
+    print_hex(esp, YELLOW);
+    print_k(YELLOW, "\nEBP:\n", (char *)VIDEO, active_screen);
+    print_hex(ebp, WHITE);
+
+    // Iterate over the stack between ESP and EBP
+    for (ptr = (unsigned long *)esp; ptr < (unsigned long *)ebp; ptr++) {
+        print_hex(*ptr, WHITE);
+        print_k(PINK, "Stack value\n", (char *)VIDEO, active_screen);
+
+        // Safety check to prevent infinite loops due to bad pointers
+        if ((unsigned long)ptr > ebp) {
+            print_k(PINK, "Warning: Stack pointer out of bounds\n", (char *)VIDEO, active_screen);
+            break;
+        }
+    }
+}
+
 
 void print_hex(unsigned int value, int color){
-	char *hex = "0123456789ABCDEF";
+	char *hex = "0123456789abcdef";
 	char buffer[9];
 	int i;
 
@@ -20,14 +46,14 @@ void putkey(int colour, char c, char *screen, unsigned int screen_nb){
 	if (c == '\b'){
 		if (indexes[screen_nb].pos_x != 0){
         	indexes[screen_nb].pos_x--;
-		      index = (unsigned short *)screen + get_index(screen_nb);
+		    index = (unsigned short *)screen + get_index(screen_nb);
           c = ' ';
           colour = WHITE;
 		      *index = c | colour << 8;
 		}
 	}
-  else if (c < 0  && c > -10)
-    switch_screen((unsigned int)(-c - 1));
+  	else if (c < 0  && c > -10)
+    	switch_screen((unsigned int)(-c - 1));
 	else if (c == '\n'){
         indexes[screen_nb].pos_x = 0;
         indexes[screen_nb].pos_y++;

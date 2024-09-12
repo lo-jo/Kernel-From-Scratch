@@ -61,6 +61,22 @@ https://wiki.osdev.org/Interrupt_Descriptor_Table
 https://pdos.csail.mit.edu/6.828/2018/readings/i386/s09_04.htm
 http://www.osdever.net/bkerndev/Docs/idt.htm
 
+
+### The GDT 
+The Global Descriptor Table defines base access and privileges for certain parts of memory.
+GRUB installs a GDT but if we overwite the area of memory that GRUB was loaded to, the GDT will be trashed and will cause a triple fault, causing the machine to be reset.
+
+To prevent that problem from happening, the GDT can be set on its own in a place in memory that is known and that we can access to.
+
+
+https://wiki.osdev.org/Global_Descriptor_Table
+
+1. Building the GDT
+2. Telling the processor where it is
+3. loading the processor registers with our entries
+Registers such as CS, DS, ES, FS... are segments.
+The CS register is the code segment that tells the procession which offset in the GDT that will find the acess privilege to execute our code.
+
 ### Linker
 Our OS can't link the ASM and the C executables together. \
 By using [ld](https://www.math.utah.edu/docs/info/ld_toc.html#SEC3), we can write a linker script that will just do that.

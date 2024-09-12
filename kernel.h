@@ -12,12 +12,12 @@
 
 /******** INTERRUPTS ********/
 extern unsigned char keyboard_map[128];
+
 // (asm functions) //
 extern void keyboard_handler(void);
 extern char in_port(unsigned short port);
 extern void out_port(unsigned short port, unsigned char data);
-extern void load_idt(unsigned long *idt_ptr);
-extern void renable_interrupts(void);
+extern void trace_stack(unsigned long *esp, unsigned long *ebp);
 
 /******** GDT ********/
 extern void gdt_flush(void);
@@ -50,6 +50,7 @@ void switch_screen(unsigned int screen_nb);
 int  get_index(unsigned int screen_nb);
 void  init_data(void);
 void print_hex(unsigned int value, int color);
+void print_stack(void);
 
 /******** IDT ********/
 void init_idt(void);

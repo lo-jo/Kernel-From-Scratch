@@ -11,6 +11,7 @@ global start
 global in_port
 global out_port
 global gdt_flush
+global trace_stack
 
 extern kmain 	        ; kmain is defined in the C file
 extern gp               ; gdt ptr defined in gdt.c
@@ -39,16 +40,20 @@ gdt_flush:
 flush2:
     ret
 
+trace_stack:
+    mov eax, [esp + 4]    ; Get the address of the esp variable from the stack
+    mov ebx, [esp + 8]    ; Get the address of the ebp variable from the stack
+    mov [eax], esp        ; Store the current esp into the memory location pointed by eax
+    mov [ebx], ebp        ; Store the current ebp into the memory location pointed by ebx
+    ret
 
 start:
     mov esp, stack_top       ; Set stack pointer to the top of the stack
     cli 			         ; Clears the interrupt flag
-    mov esp, stack_top       ; Set stack pointer to the top of the stack
     push ebx                 ; Multiboot boot info is in ebx
     call kmain               ; Call kernel main function
 
 section .bss
-align 16
 stack_space:
     resb 4096                ; Reserve 4 KB stack space
 stack_top:

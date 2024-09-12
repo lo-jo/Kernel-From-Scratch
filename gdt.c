@@ -31,15 +31,15 @@ void set_descriptor(int num, unsigned long base, unsigned long limit, unsigned c
 }
 
 void init_gdt(){
-    // init gdt 
+    // init gdt
+    
     gp.limit = (sizeof(struct gdt_entry) * 5) - 1;
     gp.base = (unsigned int)&gdt;
 
     // Your gdt must be set at address 
     // 0x00000800;
 
-    print_k(WHITE, "INIT GDT", (char *)VIDEO, active_screen);
-    // null descriptor
+    // null segment (always set to 0 - reserved)
     set_descriptor(0, 0, 0, 0, 0);
     // kernel code segment
     set_descriptor(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
