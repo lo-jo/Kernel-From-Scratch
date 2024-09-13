@@ -17,7 +17,7 @@ struct gdt_ptr{
 
 struct gdt_entry gdt[5];
 //struct gdt_ptr gp;
-struct gdt_ptr *gp = (struct gdt_ptr *)0x00000800; 
+struct gdt_ptr gp;
 
 void set_descriptor(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran){
     gdt[num].base_low = (base & 0xFFFF);
@@ -32,16 +32,13 @@ void set_descriptor(int num, unsigned long base, unsigned long limit, unsigned c
 }
 
 void init_gdt(){
-    // init gdt
-    
-
-    gp->limit = (sizeof(struct gdt_entry) * 5) - 1;
-    gp->base = ((unsigned int)(&gdt));
     //gp->base = 0;
 
     // Your gdt must be set at address 
     // 0x00000800;
 
+    gp.limit = (sizeof(struct gdt_entry) * 5) - 1;
+    gp.base = 0x00000800;
     // null segment (always set to 0 - reserved)
     set_descriptor(0, 0, 0, 0, 0);
     // kernel code segment
@@ -53,5 +50,8 @@ void init_gdt(){
     // user mode data segment
     set_descriptor(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
     // let the processor know about it by calling gdt_flush
+
+    memcpy((char *)gp.base, (char *)gdt, gp.limit);
+//    gdt_flush(gp.limit, gp.base);
     gdt_flush();
 }
