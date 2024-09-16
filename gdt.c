@@ -16,7 +16,8 @@ struct gdt_ptr{
 } __attribute__((packed));
 
 struct gdt_entry gdt[5];
-struct gdt_ptr gp; 
+struct gdt_ptr *gp = (struct gdt_ptr*)0x00000800; 
+// *gp = (struct gdt_ptr*)0x00000800;
 
 void set_descriptor(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran){
     gdt[num].base_low = (base & 0xFFFF);
@@ -33,8 +34,8 @@ void set_descriptor(int num, unsigned long base, unsigned long limit, unsigned c
 void init_gdt(){
     // init gdt
     
-    gp.limit = (sizeof(struct gdt_entry) * 5) - 1;
-    gp.base = (unsigned int)&gdt;
+    gp->limit = (sizeof(struct gdt_entry) * 5) - 1;
+    gp->base = (unsigned int)&gdt;
 
     // Your gdt must be set at address 
     // 0x00000800;
@@ -50,5 +51,5 @@ void init_gdt(){
     // user mode data segment
     set_descriptor(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
     // let the processor know about it by calling gdt_flush
-    gdt_flush();
+    gdt_flush((unsigned int)gdt);
 }

@@ -10,6 +10,8 @@
 #define WHITE 0x0f
 #define VIDEO 0xB8000
 
+#define SHELL_LINE 24
+
 /******** INTERRUPTS ********/
 extern unsigned char keyboard_map[128];
 
@@ -20,7 +22,7 @@ extern void out_port(unsigned short port, unsigned char data);
 extern void trace_stack(unsigned long *esp, unsigned long *ebp);
 
 /******** GDT ********/
-extern void gdt_flush(void);
+extern void gdt_flush(unsigned int gdt);
 void        init_gdt(void);
 
 /******** Keyboard routines ********/

@@ -28,13 +28,15 @@ out_port:
 	ret
 
 gdt_flush:
-    lgdt [gp]
+    mov eax, [esp + 4]
+    lgdt [eax]
     mov ax, 0x10        ; segment selector
     mov ds, ax          ; data segment register
     mov es, ax          ; extra segment register
     mov fs, ax          ; additional segment
-    mov gs, ax          ; additional segment
     mov ss, ax
+    mov ax, 0x18
+	mov gs, ax
     jmp 0x08:flush2
 
 flush2:
@@ -48,12 +50,12 @@ trace_stack:
     ret
 
 start:
-    mov esp, stack_top       ; Set stack pointer to the top of the stack
-    cli 			         ; Clears the interrupt flag
-    push ebx                 ; Multiboot boot info is in ebx
-    call kmain               ; Call kernel main function
+    mov esp, stack_space       ; Set stack pointer to the top of the stack
+    cli 			           ; Clears the interrupt flag
+    mov esp, stack_space       ; Set stack pointer to the top of the stack
+    call kmain                 ; Call kernel main function
+    hlt
 
 section .bss
+resb 8192
 stack_space:
-    resb 4096                ; Reserve 4 KB stack space
-stack_top:

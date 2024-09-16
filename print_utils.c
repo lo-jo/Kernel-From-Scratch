@@ -42,7 +42,7 @@ void print_hex(unsigned int value, int color){
 
 void putkey(int colour, char c, char *screen, unsigned int screen_nb){
 	unsigned short *index;
-
+	
 	if (c == '\b'){
 		if (indexes[screen_nb].pos_x != 0){
         	indexes[screen_nb].pos_x--;
