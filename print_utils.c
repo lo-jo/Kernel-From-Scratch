@@ -26,6 +26,31 @@ void print_stack(void) {
     }
 }
 
+void print_stack_test(void) {
+
+  unsigned long *ebp;
+  unsigned long eip;
+  int frame = 0;
+
+  trace_stack_test(ebp);
+  while (ebp && ebp[0] && frame < 10)
+  {
+    print_k(WHITE, "Stack frame n ", (char *)VIDEO, active_screen);
+    putkey(WHITE, frame + 48, (char *)VIDEO, active_screen);
+    print_k(WHITE, ":   ", (char *)VIDEO, active_screen);
+    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
+    print_k(WHITE, "ebp =", (char *)VIDEO, active_screen);
+    print_hex((unsigned int)ebp, YELLOW);
+    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
+    print_k(WHITE, "eip =", (char *)VIDEO, active_screen);
+    print_hex(ebp[1], YELLOW);
+    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
+    ebp = (unsigned long *)ebp[0];
+    frame++;
+  }
+  print_k(WHITE, "End of stack \n", (char *)VIDEO, active_screen);
+  return ;
+}
 
 void print_hex(unsigned int value, int color){
 	char *hex = "0123456789abcdef";
@@ -74,7 +99,6 @@ void putkey(int colour, char c, char *screen, unsigned int screen_nb){
 
 // https://wiki.osdev.org/Printing_To_Screen
 void print_k(int colour, const char *string, char *screen, unsigned int screen_nb){
-    //volatile char *video = (volatile char*)VIDEO;
 
     while(*string != 0 ){
         putkey(colour, *string++, screen, screen_nb);
@@ -82,7 +106,6 @@ void print_k(int colour, const char *string, char *screen, unsigned int screen_n
 }
 
 void clear_screen(char *screen){
-	//volatile char *video = (volatile char*)VIDEO;
 	unsigned int j = 0;
 
 	// there are 25 lines each of 80 columns; each element takes 2 bytes

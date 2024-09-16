@@ -48,11 +48,19 @@ void  init_data(void)
   	return ;
 }
 
+void  hihi(void){
+
+//  hihi2();
+//  print_stack_test();
+  return;
+}
+
 void kmain(void)
 {
 	init_data();
 	init_gdt();
-	// print_stack();
+  hihi();
+  print_stack_test();
 	while(1){
     	keyboard_routine();
   	}

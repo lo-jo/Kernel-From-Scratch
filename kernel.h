@@ -18,6 +18,7 @@ extern void keyboard_handler(void);
 extern char in_port(unsigned short port);
 extern void out_port(unsigned short port, unsigned char data);
 extern void trace_stack(unsigned long *esp, unsigned long *ebp);
+extern void trace_stack_test(unsigned long *esp);
 
 /******** GDT ********/
 extern void gdt_flush(void);
@@ -51,6 +52,7 @@ int  get_index(unsigned int screen_nb);
 void  init_data(void);
 void print_hex(unsigned int value, int color);
 void print_stack(void);
+void print_stack_test(void);
 
 /******** IDT ********/
 void init_idt(void);

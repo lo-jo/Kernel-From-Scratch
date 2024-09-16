@@ -16,6 +16,7 @@ global in_port
 global out_port
 global gdt_flush
 global trace_stack
+global trace_stack_test
 
 extern kmain 	        ; kmain is defined in the C file
 extern gp               ; gdt ptr defined in gdt.c
@@ -49,6 +50,14 @@ trace_stack:
     mov ebx, [esp + 8]    ; Get the address of the ebp variable from the stack
     mov [eax], esp        ; Store the current esp into the memory location pointed by eax
     mov [ebx], ebp        ; Store the current ebp into the memory location pointed by ebx
+    ret
+
+trace_stack_test:
+    push ebp
+    mov ebp, esp
+    mov eax, [ebp + 8]
+    mov [eax], ebp
+    pop ebp
     ret
 
 start:
