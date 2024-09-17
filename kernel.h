@@ -53,6 +53,8 @@ int  get_index(unsigned int screen_nb);
 void  init_data(void);
 void print_hex(unsigned int value, int color);
 void print_stack(void);
+void putshell(int color, char c, char *screen);
+void clear_line(char *screen, unsigned int line);
 
 /******** IDT ********/
 void init_idt(void);

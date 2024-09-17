@@ -1,31 +1,44 @@
 #include "kernel.h"
 
-void print_stack(void) {
-    unsigned long esp = 0;
-    unsigned long ebp = 0;
-    unsigned long *ptr;
-	print_k(YELLOW, "Printing stack\n", (char *)VIDEO, active_screen);
-    // Call trace_stack to properly initialize esp and ebp
-    trace_stack(&esp, &ebp);
+void putshell(int color, char c, char *screen)
+{
+	unsigned short *index;
+	index = (unsigned short *)screen + SHELL_LINE * 80 + indexes[0].pos_x;
 
-    print_k(GREEN, "ESP:\n", (char *)VIDEO, active_screen);
-    print_hex(esp, YELLOW);
-    print_k(YELLOW, "\nEBP:\n", (char *)VIDEO, active_screen);
-    print_hex(ebp, WHITE);
-
-    // Iterate over the stack between ESP and EBP
-    for (ptr = (unsigned long *)esp; ptr < (unsigned long *)ebp; ptr++) {
-        print_hex(*ptr, WHITE);
-        print_k(PINK, "Stack value\n", (char *)VIDEO, active_screen);
-
-        // Safety check to prevent infinite loops due to bad pointers
-        if ((unsigned long)ptr > ebp) {
-            print_k(PINK, "Warning: Stack pointer out of bounds\n", (char *)VIDEO, active_screen);
-            break;
-        }
-    }
+	if (c == '\b'){
+		if (indexes[active_screen].pos_x != 0){
+			if (indexes[active_screen].pos_x != 1){
+				indexes[active_screen].pos_x--;
+			}
+			c = ' ';
+			color = WHITE;
+			*index = c | color << 8;
+		}
+	}
+	else if (c < 0  && c > -10)
+    	switch_screen((unsigned int)(-c - 1));
+	else if (c == '\n'){
+		// ADD FUNCTION TO PARSE INPUT
+		clear_line(screen, SHELL_LINE);
+		indexes[active_screen].pos_y++;
+		indexes[active_screen].pos_x = 0;
+		putshell(WHITE, '>', screen);
+	}
+	else{
+		*index = c | color << 8;
+		indexes[active_screen].pos_x++;
+	}
+	if (indexes[active_screen].pos_x >= WIDTH){
+		clear_line(screen, SHELL_LINE);
+		indexes[active_screen].pos_x = 0;
+		indexes[active_screen].pos_y++;
+		putshell(WHITE, '>', screen);
+	}
+	if (indexes[active_screen].pos_y >= HEIGHT){
+		scroll();
+	}
+	update_cursor();
 }
-
 
 void print_hex(unsigned int value, int color){
 	char *hex = "0123456789abcdef";
@@ -81,14 +94,4 @@ void print_k(int colour, const char *string, char *screen, unsigned int screen_n
     }
 }
 
-void clear_screen(char *screen){
-	//volatile char *video = (volatile char*)VIDEO;
-	unsigned int j = 0;
 
-	// there are 25 lines each of 80 columns; each element takes 2 bytes
-	while(j < 80 * 25 * 2) {
-		screen[j] = ' ';
-		screen[j+1] = WHITE; 		
-		j += 2;
-	}
-}
