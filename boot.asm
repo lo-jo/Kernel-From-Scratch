@@ -33,13 +33,15 @@ out_port:
 	ret
 
 gdt_flush:
-    lgdt [gp]
+    mov eax, [esp + 4]
+    lgdt [eax]
     mov ax, 0x10        ; segment selector
     mov ds, ax          ; data segment register
     mov es, ax          ; extra segment register
     mov fs, ax          ; additional segment
-    mov gs, ax          ; additional segment
     mov ss, ax
+    mov ax, 0x18
+	mov gs, ax
     jmp 0x08:flush2
 
 flush2:
@@ -66,6 +68,7 @@ start:
     call kmain               ; Call kernel main function
 
 section .bss
+resb 8192
 stack_space:
     resb 8092                ; Reserve 4 KB stack space
 stack_top:

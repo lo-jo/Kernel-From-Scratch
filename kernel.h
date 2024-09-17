@@ -10,6 +10,8 @@
 #define WHITE 0x0f
 #define VIDEO 0xB8000
 
+#define SHELL_LINE 24
+
 /******** INTERRUPTS ********/
 extern unsigned char keyboard_map[128];
 
@@ -21,7 +23,7 @@ extern void trace_stack(unsigned long *esp, unsigned long *ebp);
 extern void trace_stack_test(unsigned long *esp);
 
 /******** GDT ********/
-extern void gdt_flush(void);
+extern void gdt_flush(unsigned int gdt);
 void        init_gdt(void);
 
 /******** Keyboard routines ********/
@@ -53,6 +55,8 @@ void  init_data(void);
 void print_hex(unsigned int value, int color);
 void print_stack(void);
 void print_stack_test(void);
+void putshell(int color, char c, char *screen);
+void clear_line(char *screen, unsigned int line);
 
 /******** IDT ********/
 void init_idt(void);

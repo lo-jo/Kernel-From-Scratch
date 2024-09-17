@@ -2,6 +2,28 @@
 
 unsigned int  active_screen = 0;
 
+void clear_line(char *screen, unsigned int line)
+{
+	unsigned short *index;
+	index = (unsigned short *)screen + line * 80;
+	for (int i = 0; i < 80 * 2; i += 2) {
+			screen[line * 80 * 2 + i] = ' ';
+			screen[line * 80 * 2 + i + 1] = WHITE;
+		}
+}
+
+void clear_screen(char *screen){
+	//volatile char *video = (volatile char*)VIDEO;
+	unsigned int j = 0;
+
+	// there are 25 lines each of 80 columns; each element takes 2 bytes
+	while(j < 80 * 25 * 2) {
+		screen[j] = ' ';
+		screen[j+1] = WHITE; 		
+		j += 2;
+	}
+}
+
 int get_index(unsigned int screen_nb){
 	unsigned short index;
 
@@ -37,7 +59,10 @@ void scroll(void)
 void update_cursor(void)
 {
     unsigned idx;
-    idx = get_index(active_screen);
+    if (active_screen == 0)
+        idx = SHELL_LINE * 80 + indexes[active_screen].pos_x;
+    else   
+        idx = indexes[active_screen].pos_y * 80 + indexes[active_screen].pos_x;
 
     /* This sends a command to indicies 14 and 15 in the
     *  CRT Control Register of the VGA controller. These

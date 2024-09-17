@@ -30,7 +30,10 @@ void keyboard_routine(void) {
 		keycode = in_port(KEY_PRESSED);
 		if(keycode < 0)
 			return;
-		putkey(GREEN, keyboard_map[keycode], (char *)VIDEO, active_screen);
+		if (active_screen == 0)
+			putshell(WHITE, keyboard_map[keycode], (char *)VIDEO);
+		else
+			putkey(GREEN, keyboard_map[keycode], (char *)VIDEO, active_screen);
 	}
 }
 
@@ -43,8 +46,15 @@ void  init_data(void)
     print_k(PINK, "42! - Screen n ", screens[i].screen, i);
     putkey(PINK, (char)((i + 1) + 48), screens[i].screen, i);
     putkey(PINK, '\n', screens[i].screen, i);
+	print_k(PINK, "Press fn + [1] for kernshell\n", screens[i].screen, i);
+	print_k(PINK, "Press fn + [2 - 9] to switch screens\n", screens[i].screen, i);
   }
   	memcpy((void *)VIDEO, screens[0].screen, WIDTH * HEIGHT * 2);
+	if (active_screen == 0){
+		print_k(WHITE, " !!! WELCOME 2 THE GROUNDBREAKING KERNSHELL !!!\n", (char *)VIDEO, active_screen);
+		print_k(GREEN, " !!! Type reboot to send triple fault\n", (char *)VIDEO, active_screen);
+		putshell(WHITE, '>', (char *)VIDEO);
+	}
   	return ;
 }
 
