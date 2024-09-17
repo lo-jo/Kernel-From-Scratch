@@ -3,6 +3,7 @@
 
 struct s_index indexes[SCREEN_NB];
 struct s_screens screens[SCREEN_NB];
+unsigned int  command_len = 0;
 
 void* memset(void* bufptr, int value, int size) {
 	unsigned char* buf = (unsigned char*) bufptr;
@@ -50,6 +51,7 @@ void  init_data(void)
 	print_k(PINK, "Press fn + [2 - 9] to switch screens\n", screens[i].screen, i);
   }
   	memcpy((void *)VIDEO, screens[0].screen, WIDTH * HEIGHT * 2);
+  //print_stack_test();
 	if (active_screen == 0){
 		print_k(WHITE, " !!! WELCOME 2 THE GROUNDBREAKING KERNSHELL !!!\n", (char *)VIDEO, active_screen);
 		print_k(GREEN, " !!! Type reboot to send triple fault\n", (char *)VIDEO, active_screen);
@@ -69,8 +71,7 @@ void kmain(void)
 {
 	init_data();
 	init_gdt();
-  hihi();
-  print_stack_test();
+  //hihi();
 	while(1){
     	keyboard_routine();
   	}

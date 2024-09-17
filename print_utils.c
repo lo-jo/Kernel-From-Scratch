@@ -19,12 +19,15 @@ void putshell(int color, char c, char *screen)
     	switch_screen((unsigned int)(-c - 1));
 	else if (c == '\n'){
 		// ADD FUNCTION TO PARSE INPUT
+    exec_command((char *)VIDEO + get_index(0) - command_len - 1);
+    command_len = 0;
 		clear_line(screen, SHELL_LINE);
 		indexes[active_screen].pos_y++;
 		indexes[active_screen].pos_x = 0;
 		putshell(WHITE, '>', screen);
 	}
 	else{
+    command_len++;
 		*index = c | color << 8;
 		indexes[active_screen].pos_x++;
 	}

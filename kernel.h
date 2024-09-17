@@ -23,7 +23,7 @@ extern void trace_stack(unsigned long *esp, unsigned long *ebp);
 extern void trace_stack_test(unsigned long *esp);
 
 /******** GDT ********/
-extern void gdt_flush(unsigned int gdt);
+extern void gdt_flush(void);
 void        init_gdt(void);
 
 /******** Keyboard routines ********/
@@ -58,6 +58,10 @@ void print_stack_test(void);
 void putshell(int color, char c, char *screen);
 void clear_line(char *screen, unsigned int line);
 
+/******** SHELL ********/
+void  exec_command(const char *command);
+
+
 /******** IDT ********/
 void init_idt(void);
 
@@ -83,5 +87,7 @@ extern unsigned int active_screen;
 
 extern unsigned int pos_x;
 extern unsigned int pos_y;
+
+extern unsigned int command_len;
 
 #endif

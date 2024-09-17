@@ -33,8 +33,7 @@ out_port:
 	ret
 
 gdt_flush:
-    mov eax, [esp + 4]
-    lgdt [eax]
+    lgdt [gp]
     mov ax, 0x10        ; segment selector
     mov ds, ax          ; data segment register
     mov es, ax          ; extra segment register
