@@ -65,7 +65,7 @@ boot:
 	$(QEMU) -cdrom $(ISO_PATH)
 
 log-emulate:
-	$(QEMU) -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -kernel $(KERNEL)
+	$(QEMU) -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -kernel $(ISO_PATH)
 
 log-boot:
 	$(QEMU) -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -no-reboot -cdrom $(KERNEL)

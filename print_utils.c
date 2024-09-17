@@ -29,7 +29,6 @@ void print_stack(void) {
 void print_stack_test(void) {
 
   unsigned long *ebp;
-  unsigned long eip;
   int frame = 0;
 
   trace_stack_test(ebp);
@@ -44,6 +43,10 @@ void print_stack_test(void) {
     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
     print_k(WHITE, "eip =", (char *)VIDEO, active_screen);
     print_hex(ebp[1], YELLOW);
+    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
+    print_k(WHITE, "prev ebp =", (char *)VIDEO, active_screen);
+    print_hex(ebp[0], YELLOW);
+    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
     ebp = (unsigned long *)ebp[0];
     frame++;
