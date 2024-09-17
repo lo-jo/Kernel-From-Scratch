@@ -37,7 +37,10 @@ void scroll(void)
 void update_cursor(void)
 {
     unsigned idx;
-    idx = SHELL_LINE * 80 + indexes[active_screen].pos_x;
+    if (active_screen == 0)
+        idx = SHELL_LINE * 80 + indexes[active_screen].pos_x;
+    else   
+        idx = indexes[active_screen].pos_y * 80 + indexes[active_screen].pos_x;
 
     /* This sends a command to indicies 14 and 15 in the
     *  CRT Control Register of the VGA controller. These

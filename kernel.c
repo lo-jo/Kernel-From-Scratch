@@ -21,18 +21,22 @@ void minishell_that(int color, char c, char *screen)
 	// get_index(active_screen);
 	if (c == '\b'){
 		if (indexes[active_screen].pos_x != 0){
-			indexes[active_screen].pos_x--;
+			if (indexes[active_screen].pos_x != 1){
+				indexes[active_screen].pos_x--;
+			}
 			c = ' ';
 			color = WHITE;
 			*index = c | color << 8;
 		}
 	}
+	else if (c < 0  && c > -10)
+    	switch_screen((unsigned int)(-c - 1));
 	else if (c == '\n'){
-		// clear_terminal(screen);
 		clear_line(screen, SHELL_LINE);
 		indexes[active_screen].pos_y++;
 		indexes[active_screen].pos_x = 0;
 		minishell_that(WHITE, '>', screen);
+		// ADD FUNCTION TO PARSE INPUT
 	}
 	else{
 		*index = c | color << 8;
