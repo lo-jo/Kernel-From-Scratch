@@ -1,5 +1,45 @@
 #include "kernel.h"
 
+void ft_sardine(void)
+{
+	print_k(WHITE, " __      ___              _         \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, " \\ \\    / (_)            | |        \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "  \\ \\  / / ___   ____ _  | | __ _   \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "   \\ \\/ / | \\ \\ / / _` | | |/ _` |  \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "    \\  /  | |\\ V / (_| | | | (_| |  \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "     \\/   |_| \\_/ \\__,_| |_|\\__,_|  \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "                   | (_)            \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "  ___  __ _ _ __ __| |_ _ __   __ _ \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, " / __|/ _` | '__/ _` | | '_ \\ / _` |\n", (char *)VIDEO, active_screen);
+	print_k(WHITE, " \\__ \\ (_| | | | (_| | | | | | (_| |\n", (char *)VIDEO, active_screen);
+	print_k(WHITE, " |___/\\__,_|_|  \\__,_|_|_| |_|\\__,_|\n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "  | (_) |                           \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "  | |_| |__  _ __ ___     <*))))><  \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "  | | | '_ \\| '__/ _ \\        <*))))><\n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "  | | | |_) | | |  __/     <*))))><  \n", (char *)VIDEO, active_screen);
+	print_k(WHITE, "  |_|_|_.__/|_|  \\___|             \n", (char *)VIDEO, active_screen);
+}
+
+
+// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+// ⠀⠀⠀⠀⢀⣠⡤⠶⠒⠛⠋⢉⣉⣉⣉⣉⣉⣉⡉⠙⠛⠒⠶⢤⣄⡀⠀⠀⠀⠀
+// ⠀⠀⣠⣾⠋⣁⣤⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣤⣈⠙⣷⣄⠀⠀
+// ⠀⢸⣿⣧⡐⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢂⣼⣿⡇⠀
+// ⠀⢀⠙⠿⣿⣦⣌⣉⣛⠛⠛⠛⠛⠻⠿⠿⠟⠛⠛⠛⠛⣛⣉⣡⣴⣿⠿⠋⡀⠀
+// ⠀⢸⣷⣦⣄⣉⠙⠛⠻⠿⠿⢿⣶⣶⣶⣶⣶⣶⡿⠿⠿⠟⠛⠋⣉⣠⣴⣾⡇⠀
+// ⠀⢸⣿⣿⣿⣿⣿⣿⣶⣶⣦⣤⣤⣤⣤⣤⣤⣤⣤⣴⣶⣶⣿⣿⣿⣿⣿⣿⡇⠀
+// ⠀⢸⣿⣿⣿⡏⠻⣿⣿⣿⣿⣿⣿⡿⠿⠿⠿⠿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀
+// ⠀⢸⣿⣿⣿⡇⠀⠀⠙⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠛⢿⣿⣿⣿⡇⠀
+// ⠀⢸⣿⣿⣿⡇⠀⠀⣠⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣿⡇⠀
+// ⠀⠀⠻⢿⣿⣇⣴⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣶⣶⣶⣿⣿⣿⣿⣿⣿⡿⠟⠀⠀
+// ⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀
+// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+
+
+                               
+
 void putshell(int color, char c, char *screen)
 {
 	unsigned short *index;

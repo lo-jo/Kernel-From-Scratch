@@ -17,6 +17,9 @@ global out_port
 global gdt_flush
 global trace_stack
 global trace_stack_test
+global halt
+global send_triple_fault
+global reboot
 
 extern kmain 	        ; kmain is defined in the C file
 extern gp               ; gdt ptr defined in gdt.c
@@ -60,6 +63,15 @@ trace_stack_test:
     mov [eax], ebp
     pop ebp
     ret
+
+send_triple_fault:
+    int 0x80
+
+send_reboot:
+    int 0x81
+
+halt:
+    hlt
 
 start:
     mov esp, stack_top       ; Set stack pointer to the top of the stack
