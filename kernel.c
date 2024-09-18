@@ -34,7 +34,6 @@ void keyboard_routine(void) {
 		if (active_screen == 0)
 			putshell(WHITE, keyboard_map[keycode], (char *)VIDEO);
 		else{
-			ft_sardine();
 			putkey(GREEN, keyboard_map[keycode], (char *)VIDEO, active_screen);
 		}
 	}

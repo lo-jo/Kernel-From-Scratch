@@ -37,22 +37,25 @@ int get_index(unsigned int screen_nb){
 void scroll(void)
 {
     unsigned temp;
+    unsigned int line = 24;
 
-    if(indexes[active_screen].pos_y >= 25)
+    if (active_screen == 0)
+      line = SHELL_LINE;
+    if(indexes[active_screen].pos_y >= line)
     {
         /* select chunk of memory from screen */
-        temp = indexes[active_screen].pos_y - 25 + 1;
+        temp = indexes[active_screen].pos_y - line + 1;
         /* copy it into screen */
-        memcpy((unsigned char *)VIDEO, (unsigned char *)VIDEO + temp * 80 * 2, (25 - temp) * 80 * 2);
+        memcpy((unsigned char *)VIDEO, (unsigned char *)VIDEO + temp * 80 * 2, (line - temp) * 80 * 2);
 
         /* set last line to blank */
-        // memset ((unsigned short *)VIDEO + (25 - temp) * 80, blank, 80 * 2);
-        unsigned char* buffer = (unsigned char *)VIDEO + (25 - temp) * 80 * 2;
+        // memset ((unsigned short *)VIDEO + (line - temp) * 80, blank, 80 * 2);
+        unsigned char* buffer = (unsigned char *)VIDEO + (line - temp) * 80 * 2;
         for (int i = 0; i < 80 *2; i+=2){
             buffer[i] = ' ';
             buffer[i+1] = WHITE;
         }
-        indexes[active_screen].pos_y = 25 - 1;
+        indexes[active_screen].pos_y = line - 1;
     }
 }
 

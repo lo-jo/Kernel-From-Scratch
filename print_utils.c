@@ -49,10 +49,12 @@ void putshell(int color, char c, char *screen)
 		if (indexes[active_screen].pos_x != 0){
 			if (indexes[active_screen].pos_x != 1){
 				indexes[active_screen].pos_x--;
+        index -= 1;
 			}
 			c = ' ';
 			color = WHITE;
 			*index = c | color << 8;
+      command_len--;
 		}
 	}
 	else if (c < 0  && c > -10)
@@ -62,8 +64,8 @@ void putshell(int color, char c, char *screen)
     exec_command((char *)VIDEO + (get_shell_index(0) * 2) - (command_len * 2) + 1);
     command_len = 0;
 		clear_line(screen, SHELL_LINE);
+    indexes[active_screen].pos_x = 0;
 		indexes[active_screen].pos_y++;
-		indexes[active_screen].pos_x = 0;
 		putshell(WHITE, '>', screen);
 	}
 	else{
@@ -128,6 +130,8 @@ void print_hex(unsigned int value, int color){
 void putkey(int colour, char c, char *screen, unsigned int screen_nb){
 	unsigned short *index;
 	
+  // if (indexes[screen_nb].pos_y == 24)
+  //   indexes[screen_nb].pos_y--;
 	if (c == '\b'){
 		if (indexes[screen_nb].pos_x != 0){
         	indexes[screen_nb].pos_x--;

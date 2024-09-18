@@ -24,7 +24,7 @@ extern void trace_stack_test(unsigned long *esp);
 extern void halt(void);
 
 extern void send_triple_fault(void);
-// void send_reboot(void);
+void send_reboot(void);
 
 /******** GDT ********/
 extern void gdt_flush(void);

@@ -19,7 +19,7 @@ global trace_stack
 global trace_stack_test
 global halt
 global send_triple_fault
-global reboot
+global send_reboot
 
 extern kmain 	        ; kmain is defined in the C file
 extern gp               ; gdt ptr defined in gdt.c

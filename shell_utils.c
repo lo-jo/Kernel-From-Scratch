@@ -33,14 +33,19 @@ void  exec_command(const char *command_start){
     i++;
   }
   command[i] = '\0';
-  if (!ft_strncmp(command, "print_stack", command_len))
+  indexes[active_screen].pos_x = 0;
+  scroll();
+  if (!ft_strncmp(command, "stack", command_len))
     print_stack_test();
   else if (!ft_strncmp(command, "reboot", command_len))
-    print_k(WHITE, "reboot", (char *)VIDEO, active_screen);
+    send_reboot();
+    //print_k(WHITE, "reboot", (char *)VIDEO, active_screen);
   else if (!ft_strncmp(command, "halt", command_len))
-    print_k(WHITE, "halt", (char *)VIDEO, active_screen);
+    halt();
+    //print_k(WHITE, "halt", (char *)VIDEO, active_screen);
   else if (!ft_strncmp(command, "sardines", command_len))
-    print_k(WHITE, "sardines", (char *)VIDEO, active_screen);
+    ft_sardine();
+    //print_k(WHITE, "sardines", (char *)VIDEO, active_screen);
   else if (!ft_strncmp(command, "help", command_len))
     print_k(WHITE, "help", (char *)VIDEO, active_screen);
   else
