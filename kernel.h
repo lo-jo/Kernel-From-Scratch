@@ -21,6 +21,10 @@ extern char in_port(unsigned short port);
 extern void out_port(unsigned short port, unsigned char data);
 extern void trace_stack(unsigned long *esp, unsigned long *ebp);
 extern void trace_stack_test(unsigned long *esp);
+extern void halt(void);
+
+extern void send_triple_fault(void);
+// void send_reboot(void);
 
 /******** GDT ********/
 extern void gdt_flush(void);
@@ -57,6 +61,7 @@ void print_stack(void);
 void print_stack_test(void);
 void putshell(int color, char c, char *screen);
 void clear_line(char *screen, unsigned int line);
+void ft_sardine(void);
 
 /******** SHELL ********/
 void  exec_command(const char *command);
