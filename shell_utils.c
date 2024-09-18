@@ -14,8 +14,19 @@ int	ft_strncmp(const char *s1, const char *s2, int n)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
+// char  *retrieve_command(char *command_start){
+//
+//   char command[256];
+//   for(unsigned char i = 0; i < command_size; i++)
+//     command[i] = command_start[i];
+//   command[i] = '\0';
+//   return command;
+// }
+
 void  exec_command(const char *command){
 
+  //char  command[256];
+  //command = retrieve_command(command_start);
   if (!ft_strncmp(command, "print_stack", command_len))
     print_stack_test();
   else if (!ft_strncmp(command, "reboot", command_len))
