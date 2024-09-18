@@ -60,7 +60,7 @@ void clear_line(char *screen, unsigned int line);
 
 /******** SHELL ********/
 void  exec_command(const char *command);
-
+int get_shell_index(unsigned int screen_nb);
 
 /******** IDT ********/
 void init_idt(void);

@@ -14,19 +14,25 @@ int	ft_strncmp(const char *s1, const char *s2, int n)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-// char  *retrieve_command(char *command_start){
-//
-//   char command[256];
-//   for(unsigned char i = 0; i < command_size; i++)
-//     command[i] = command_start[i];
-//   command[i] = '\0';
-//   return command;
-// }
+int get_shell_index(unsigned int screen_nb){
+	unsigned short index;
 
-void  exec_command(const char *command){
+	/* equation for finding the index in a linear chunk of memory:
+    *  Index = [(y * width) + x] */
+	index = SHELL_LINE * 80 + indexes[screen_nb].pos_x;
 
-  //char  command[256];
-  //command = retrieve_command(command_start);
+	return index;
+}
+
+void  exec_command(const char *command_start){
+
+  char  command[256];
+  int i = 0;
+  while (i < command_len - 1){
+    command[i] = command_start[1 + (2 * i)];
+    i++;
+  }
+  command[i] = '\0';
   if (!ft_strncmp(command, "print_stack", command_len))
     print_stack_test();
   else if (!ft_strncmp(command, "reboot", command_len))
