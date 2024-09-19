@@ -39,15 +39,15 @@ void  exec_command(const char *command_start){
     print_stack_test();
   else if (!ft_strncmp(command, "reboot", command_len))
     send_reboot();
-    //print_k(WHITE, "reboot", (char *)VIDEO, active_screen);
   else if (!ft_strncmp(command, "halt", command_len))
     halt();
-    //print_k(WHITE, "halt", (char *)VIDEO, active_screen);
   else if (!ft_strncmp(command, "sardines", command_len))
     ft_sardine();
-    //print_k(WHITE, "sardines", (char *)VIDEO, active_screen);
   else if (!ft_strncmp(command, "help", command_len))
-    print_k(WHITE, "help", (char *)VIDEO, active_screen);
-  else
-    print_k(WHITE, "Command not found, type 'help' to list commands", (char *)VIDEO, active_screen); 
+    ft_help();
+  else {
+    print_k(WHITE, "Command '", (char *)VIDEO, active_screen); 
+    print_k(WHITE, command, (char *)VIDEO, active_screen); 
+    print_k(WHITE, "' not found, type 'help' to list commands", (char *)VIDEO, active_screen); 
+  }
 }

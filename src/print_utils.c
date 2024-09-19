@@ -20,6 +20,15 @@ void ft_sardine(void)
 	print_k(WHITE, "  |_|_|_.__/|_|  \\___|             \n", (char *)VIDEO, active_screen);
 }
 
+void  ft_help(void)
+{
+  print_k(WHITE, "\n'halt' :  halt the CPU \n", (char *)VIDEO, active_screen);
+  print_k(WHITE, "'reboot' :  reboot the kernel \n", (char *)VIDEO, active_screen);
+  print_k(WHITE, "'stack' :  print the stack frames \n", (char *)VIDEO, active_screen);
+  print_k(WHITE, "'sardines' : print the Anticapitalist Independentist Sardines Union's\n", (char *)VIDEO, active_screen);
+  print_k(WHITE, "slogan (sponsor of the project)\n", (char *)VIDEO, active_screen);
+}
+
 
 // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -60,7 +69,6 @@ void putshell(int color, char c, char *screen)
 	else if (c < 0  && c > -10)
     	switch_screen((unsigned int)(-c - 1));
 	else if (c == '\n'){
-		// ADD FUNCTION TO PARSE INPUT
     exec_command((char *)VIDEO + (get_shell_index(0) * 2) - (command_len * 2) + 1);
     command_len = 0;
 		clear_line(screen, SHELL_LINE);
@@ -74,6 +82,7 @@ void putshell(int color, char c, char *screen)
 		indexes[active_screen].pos_x++;
 	}
 	if (indexes[active_screen].pos_x >= WIDTH){
+    command_len = 1;
 		clear_line(screen, SHELL_LINE);
 		indexes[active_screen].pos_x = 0;
 		indexes[active_screen].pos_y++;
@@ -130,15 +139,13 @@ void print_hex(unsigned int value, int color){
 void putkey(int colour, char c, char *screen, unsigned int screen_nb){
 	unsigned short *index;
 	
-  // if (indexes[screen_nb].pos_y == 24)
-  //   indexes[screen_nb].pos_y--;
 	if (c == '\b'){
 		if (indexes[screen_nb].pos_x != 0){
-        	indexes[screen_nb].pos_x--;
+        indexes[screen_nb].pos_x--;
 		    index = (unsigned short *)screen + get_index(screen_nb);
-          c = ' ';
-          colour = WHITE;
-		      *index = c | colour << 8;
+        c = ' ';
+        colour = WHITE;
+		    *index = c | colour << 8;
 		}
 	}
   	else if (c < 0  && c > -10)
@@ -168,5 +175,3 @@ void print_k(int colour, const char *string, char *screen, unsigned int screen_n
         putkey(colour, *string++, screen, screen_nb);
     }
 }
-
-

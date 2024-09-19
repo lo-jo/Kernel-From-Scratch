@@ -62,6 +62,7 @@ void print_stack_test(void);
 void putshell(int color, char c, char *screen);
 void clear_line(char *screen, unsigned int line);
 void ft_sardine(void);
+void ft_help(void);
 
 /******** SHELL ********/
 void  exec_command(const char *command);

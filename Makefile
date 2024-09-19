@@ -5,56 +5,59 @@ QEMU=qemu-system-i386
 
 # Compilation flags
 NASMFLAGS=-f elf32 -g -F dwarf
-GCCFLAGS=-m32 -c -fno-builtin -fno-stack-protector -nostdlib -nodefaultlibs -g3
-LDFLAGS=-m elf_i386 -T linker.ld
+GCCFLAGS=-m32 -c -fno-builtin -fno-stack-protector -fno-omit-frame-pointer -nostdlib -nodefaultlibs -g3
+LDFLAGS=-m elf_i386 -T src/linker.ld
 
 # Directories
-OBJ_DIR=obj
-LOG_FILES_DIRECTORY=./qemudebuglogs
+SRC_DIR=src
+LOG_FILES_DIR=./qemudebuglogs
 ISO_PATH=scripts/kernhell.iso
 
 # Sources and Objects
-ASM_SOURCE=boot.asm
-C_SOURCES=kernel.c screen.c print_utils.c gdt.c shell_utils.c
-ASM_OBJECT=$(OBJ_DIR)/boot.o
-C_OBJECTS=$(addprefix $(OBJ_DIR)/, $(C_SOURCES:.c=.o))
+ASM_SOURCE=src/boot.asm \
+
+C_SOURCES=src/kernel.c \
+					src/screen.c \
+					src/print_utils.c \
+					src/gdt.c \
+					src/shell_utils.c \
+
+ASM_OBJECT=$(ASM_SOURCE:.asm=.o)
+C_OBJECTS=$(C_SOURCES:.c=.o)
 KERNEL=kernel-100
 
 QEMU_LOG_FILE=$(shell date +'%Y%m%d_%H%M%S')_qemu_debug.log
 
 all: $(KERNEL)
 
-# Ensure object directory exists
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
-
-# Ensure object directory exists
-$(LOG_FILES_DIRECTORY):
-	mkdir -p $(LOG_FILES_DIRECTORY)
+# Ensure logfiles directory exists
+$(LOG_FILES_DIR):
+	mkdir -p $(LOG_FILES_DIR)
 
 # Assemble the ASM file into the object directory
-$(ASM_OBJECT): $(ASM_SOURCE) $(OBJ_DIR)
+$(ASM_OBJECT): $(ASM_SOURCE) 
 	$(NASM) $(NASMFLAGS) $(ASM_SOURCE) -o $(ASM_OBJECT)
 
-# Compile each C source file into the object directory
-$(OBJ_DIR)/%.o: %.c $(OBJ_DIR)
+# Compile each C source file into the directory
+%.o: %.c
 	$(GCC) $(GCCFLAGS) $< -o $@
 
 # Link the object files
-$(KERNEL): $(ASM_OBJECT) $(C_OBJECTS) $(LOG_FILES_DIRECTORY)
+$(KERNEL): $(ASM_OBJECT) $(C_OBJECTS) $(LOG_FILES_DIR)
 	$(LD) $(LDFLAGS) -o $(KERNEL) $(ASM_OBJECT) $(C_OBJECTS)
 	cp ./$(KERNEL) ./scripts
 	docker compose -f docker-compose.yml up -d --build
 
 clean:
 	rm -f $(ASM_OBJECT) $(C_OBJECTS) $(KERNEL)
-	rm -rf $(OBJ_DIR)
+	rm -f ./scripts/$(KERNEL)
+	rm -rf ./scripts/isodir/ 
+	rm -rf $(LOG_FILES_DIR)
 	docker compose -f docker-compose.yml down
 
 fclean: clean
-	rm -f ./scripts/$(KERNEL)
-	rm -rf ./scripts/isodir/ 
 	rm -f ./scripts/kernhell.iso
+	docker system prune -af
 
 re: fclean all
 

@@ -15,8 +15,7 @@ struct gdt_ptr{
     unsigned int base;
 } __attribute__((packed));
 
-struct gdt_entry gdt[5];
-//struct gdt_ptr gp;
+struct gdt_entry gdt[7];
 struct gdt_ptr gp;
 
 void set_descriptor(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran){
@@ -32,12 +31,8 @@ void set_descriptor(int num, unsigned long base, unsigned long limit, unsigned c
 }
 
 void init_gdt(){
-    //gp->base = 0;
 
-    // Your gdt must be set at address 
-    // 0x00000800;
-
-    gp.limit = (sizeof(struct gdt_entry) * 5) - 1;
+    gp.limit = (sizeof(struct gdt_entry) * 7) - 1;
     gp.base = 0x00000800;
     // null segment (always set to 0 - reserved)
     set_descriptor(0, 0, 0, 0, 0);
@@ -45,13 +40,16 @@ void init_gdt(){
     set_descriptor(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
     // data segment
     set_descriptor(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
+    // kernel mode stack segment
+    set_descriptor(3, 0, 0xFFFFFFFF, 0x92, 0xCF);
     // user mode code segment
-    set_descriptor(3, 0, 0xFFFFFFFF, 0xFA, 0xAF);
+    set_descriptor(4, 0, 0xFFFFFFFF, 0xFA, 0xCF);
     // user mode data segment
-    set_descriptor(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
+    set_descriptor(5, 0, 0xFFFFFFFF, 0xF2, 0xCF);
+    // user mode stack segment
+    set_descriptor(6, 0, 0xFFFFFFFF, 0xF2, 0xCF);
     // let the processor know about it by calling gdt_flush
 
     memcpy((char *)gp.base, (char *)gdt, gp.limit);
-//    gdt_flush(gp.limit, gp.base);
     gdt_flush();
 }
