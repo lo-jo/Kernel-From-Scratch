@@ -57,11 +57,12 @@ trace_stack:
     ret
 
 trace_stack_test:
-    push ebp
-    mov ebp, esp
-    mov eax, [ebp + 8]
-    mov [eax], ebp
-    pop ebp
+    mov eax, [esp + 4]  ; Load the address of EBP pointer (first argument)
+    mov ebx, ebp        ; Get the value of EBP
+    mov [eax], ebx      ; Store EBP value at the pointer address
+    mov eax, [esp + 8]  ; Load the address of ESP pointer (second argument)
+    mov ebx, esp        ; Get the value of ESP
+    mov [eax], ebx      ; Store ESP value at the pointer address
     ret
 
 send_triple_fault:

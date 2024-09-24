@@ -94,46 +94,100 @@ void putshell(int color, char c, char *screen)
 	update_cursor();
 }
 
-void print_stack_test(void) {
+// void print_stack_test(void) {
+//
+//   unsigned long *ebp;
+//   int frame = 0;
+//
+//   trace_stack_test(ebp);
+//   while (ebp && ebp[0] && frame < 10)
+//   {
+//     print_k(WHITE, "Stack frame n ", (char *)VIDEO, active_screen);
+//     putkey(WHITE, frame + 48, (char *)VIDEO, active_screen);
+//     print_k(WHITE, ":   ", (char *)VIDEO, active_screen);
+//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
+//     print_k(WHITE, "ebp =", (char *)VIDEO, active_screen);
+//     print_hex((unsigned int)ebp, YELLOW);
+//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
+//     print_k(WHITE, "eip =", (char *)VIDEO, active_screen);
+//     print_hex(ebp[1], YELLOW);
+//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
+//     print_k(WHITE, "prev ebp =", (char *)VIDEO, active_screen);
+//     print_hex(ebp[0], YELLOW);
+//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
+//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
+//     ebp = (unsigned long *)ebp[0];
+//     frame++;
+//   }
+//   print_k(WHITE, "End of stack \n", (char *)VIDEO, active_screen);
+//   return ;
+// }
 
-  unsigned long *ebp;
-  int frame = 0;
-
-  trace_stack_test(ebp);
-  while (ebp && ebp[0] && frame < 10)
-  {
-    print_k(WHITE, "Stack frame n ", (char *)VIDEO, active_screen);
-    putkey(WHITE, frame + 48, (char *)VIDEO, active_screen);
-    print_k(WHITE, ":   ", (char *)VIDEO, active_screen);
-    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-    print_k(WHITE, "ebp =", (char *)VIDEO, active_screen);
-    print_hex((unsigned int)ebp, YELLOW);
-    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-    print_k(WHITE, "eip =", (char *)VIDEO, active_screen);
-    print_hex(ebp[1], YELLOW);
-    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-    print_k(WHITE, "prev ebp =", (char *)VIDEO, active_screen);
-    print_hex(ebp[0], YELLOW);
-    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-    putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-    ebp = (unsigned long *)ebp[0];
-    frame++;
-  }
-  print_k(WHITE, "End of stack \n", (char *)VIDEO, active_screen);
-  return ;
-}
-
-void print_hex(unsigned int value, int color){
+void print_hex(unsigned int value, int color, int size){
 	char *hex = "0123456789abcdef";
 	char buffer[9];
 	int i;
 
-	buffer[8] = 0;
-	for(i = 7; i >= 0; i--){
+	buffer[size] = 0;
+	for(i = size - 1; i >= 0; i--){
 		buffer[i] = hex[value & 0xF];
 		value >>= 4;
 	}
 	print_k(color, buffer, (char *)VIDEO, active_screen);
+}
+
+void  hexdump_k(uint32_t stack_top, int limit){
+
+  char  *address = (char *)stack_top;
+  int i;
+  char *start_point;
+
+  for (i = 0; stack_top < limit; i++)
+  {
+    if (i % 16 == 0)
+    {
+      if (i != 0)
+      {
+        start_point = address - 16;
+        for (int y = 0; y < 16; y++)
+        {
+          if (start_point[y] <= 32)
+            putkey(WHITE, '.', (char *)VIDEO, active_screen);
+          else
+            putkey(WHITE, start_point[i], (char *)VIDEO, active_screen);
+        }
+
+        print_k(WHITE, "\n", (char *)VIDEO, active_screen);
+      }
+      print_hex((unsigned int)stack_top, PINK, 8);
+    }
+    print_k(WHITE, " ", (char *)VIDEO, active_screen);
+    print_hex(address[i], WHITE, 2);
+    stack_top++;
+  }
+  return ;
+}
+
+void get_ebp_esp(unsigned int *ebp_ptr, unsigned int *esp_ptr) {
+    // Inline assembly to get EBP and ESP
+    asm volatile (
+        "movl %%ebp, %0 \n\t"  // Move the value of EBP into the memory location of ebp_ptr
+        "movl %%esp, %1 \n\t"  // Move the value of ESP into the memory location of esp_ptr
+        : "=r" (*ebp_ptr), "=r" (*esp_ptr)
+  );
+    return ;
+}
+
+void  print_stack_test(void)
+{
+  uint32_t *ebp;
+  uint32_t *esp;
+
+  //hexdump_k(*esp, (*ebp - *esp));
+  trace_stack((unsigned long *)esp, (unsigned long *)ebp);
+  hexdump_k(*esp, *ebp);
+  print_k(WHITE, "\n", (char *)VIDEO, active_screen);
+  return ;
 }
 
 void putkey(int colour, char c, char *screen, unsigned int screen_nb){

@@ -56,24 +56,18 @@ void  init_data(void)
 	if (active_screen == 0){
 		print_k(WHITE, " !!! WELCOME 2 THE GROUNDBREAKING KERNSHELL !!!\n", (char *)VIDEO, active_screen);
 		print_k(GREEN, " !!! Type reboot to send triple fault\n", (char *)VIDEO, active_screen);
+    print_stack_test();
 		putshell(WHITE, '>', (char *)VIDEO);
 	}
   	return ;
-}
-
-void  hihi(void){
-
-//  hihi2();
-//  print_stack_test();
-  return;
 }
 
 void kmain(void)
 {
 	init_data();
 	init_gdt();
-  //hihi();
-	while(1){
+  print_stack_test();
+  while(1){
     	keyboard_routine();
   	}
 	return;

@@ -1,6 +1,8 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
+# include <stdint.h>
+
 /********* COLORS ********/
 #define BLACK 0x00
 #define BLUE 0x01
@@ -20,7 +22,7 @@ extern void keyboard_handler(void);
 extern char in_port(unsigned short port);
 extern void out_port(unsigned short port, unsigned char data);
 extern void trace_stack(unsigned long *esp, unsigned long *ebp);
-extern void trace_stack_test(unsigned long *esp);
+extern void trace_stack_test(unsigned long *ebp, unsigned long *esp);
 extern void halt(void);
 
 extern void send_triple_fault(void);
@@ -56,7 +58,7 @@ void scroll(void);
 void switch_screen(unsigned int screen_nb);
 int  get_index(unsigned int screen_nb);
 void  init_data(void);
-void print_hex(unsigned int value, int color);
+void print_hex(unsigned int value, int color, int size);
 void print_stack(void);
 void print_stack_test(void);
 void putshell(int color, char c, char *screen);
