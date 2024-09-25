@@ -77,6 +77,6 @@ debug-emulate:
 	$(QEMU) -s -S -d int -kernel $(KERNEL)
 
 debug-boot:
-	$(QEMU) -s -S -d int -D $(LOG_FILES_DIRECTORY)/$(QEMU_LOG_FILE) -no-reboot -cdrom $(ISO_PATH)
+	$(QEMU) -s -S -no-reboot -cdrom $(ISO_PATH)
 
 .PHONY: all clean fclean re emulate boot log-emulate log-boot debug-emulate debug-boot

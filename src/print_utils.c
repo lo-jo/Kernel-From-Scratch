@@ -22,7 +22,8 @@ void ft_sardine(void)
 
 void  ft_help(void)
 {
-  print_k(WHITE, "\n'halt' :  halt the CPU \n", (char *)VIDEO, active_screen);
+  print_k(WHITE, "'clear' : clears the screen\n", (char *)VIDEO, active_screen);
+  print_k(WHITE, "'halt' :  halt the CPU \n", (char *)VIDEO, active_screen);
   print_k(WHITE, "'reboot' :  reboot the kernel \n", (char *)VIDEO, active_screen);
   print_k(WHITE, "'stack' :  print the stack frames \n", (char *)VIDEO, active_screen);
   print_k(WHITE, "'sardines' : print the Anticapitalist Independentist Sardines Union's\n", (char *)VIDEO, active_screen);
@@ -46,9 +47,6 @@ void  ft_help(void)
 // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
-
-                               
-
 void putshell(int color, char c, char *screen)
 {
 	unsigned short *index;
@@ -63,7 +61,8 @@ void putshell(int color, char c, char *screen)
 			c = ' ';
 			color = WHITE;
 			*index = c | color << 8;
-      command_len--;
+      if (command_len > 1)
+        command_len--;
 		}
 	}
 	else if (c < 0  && c > -10)
@@ -94,35 +93,6 @@ void putshell(int color, char c, char *screen)
 	update_cursor();
 }
 
-// void print_stack_test(void) {
-//
-//   unsigned long *ebp;
-//   int frame = 0;
-//
-//   trace_stack_test(ebp);
-//   while (ebp && ebp[0] && frame < 10)
-//   {
-//     print_k(WHITE, "Stack frame n ", (char *)VIDEO, active_screen);
-//     putkey(WHITE, frame + 48, (char *)VIDEO, active_screen);
-//     print_k(WHITE, ":   ", (char *)VIDEO, active_screen);
-//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-//     print_k(WHITE, "ebp =", (char *)VIDEO, active_screen);
-//     print_hex((unsigned int)ebp, YELLOW);
-//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-//     print_k(WHITE, "eip =", (char *)VIDEO, active_screen);
-//     print_hex(ebp[1], YELLOW);
-//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-//     print_k(WHITE, "prev ebp =", (char *)VIDEO, active_screen);
-//     print_hex(ebp[0], YELLOW);
-//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-//     putkey(WHITE, '\n', (char *)VIDEO, active_screen);
-//     ebp = (unsigned long *)ebp[0];
-//     frame++;
-//   }
-//   print_k(WHITE, "End of stack \n", (char *)VIDEO, active_screen);
-//   return ;
-// }
-
 void print_hex(unsigned int value, int color, int size){
 	char *hex = "0123456789abcdef";
 	char buffer[9];
@@ -149,33 +119,27 @@ void  hexdump_k(uint32_t stack_top, int limit){
       if (i != 0)
       {
         start_point = address - 16;
+        putkey(WHITE, ' ', (char *)VIDEO, active_screen);
+        putkey(WHITE, ' ', (char *)VIDEO, active_screen);
         for (int y = 0; y < 16; y++)
         {
-          if (start_point[y] <= 32)
+          if (start_point[y] <= 32 || start_point[y] >= 126)
             putkey(WHITE, '.', (char *)VIDEO, active_screen);
           else
-            putkey(WHITE, start_point[i], (char *)VIDEO, active_screen);
+            putkey(WHITE, start_point[y], (char *)VIDEO, active_screen);
         }
-
         print_k(WHITE, "\n", (char *)VIDEO, active_screen);
       }
+	    print_k(PINK, "0x", (char *)VIDEO, active_screen);
       print_hex((unsigned int)stack_top, PINK, 8);
+	    print_k(PINK, ": ", (char *)VIDEO, active_screen);
     }
     print_k(WHITE, " ", (char *)VIDEO, active_screen);
-    print_hex(address[i], WHITE, 2);
+    print_hex(*address, WHITE, 2);
     stack_top++;
+    address++;
   }
   return ;
-}
-
-void get_ebp_esp(unsigned int *ebp_ptr, unsigned int *esp_ptr) {
-    // Inline assembly to get EBP and ESP
-    asm volatile (
-        "movl %%ebp, %0 \n\t"  // Move the value of EBP into the memory location of ebp_ptr
-        "movl %%esp, %1 \n\t"  // Move the value of ESP into the memory location of esp_ptr
-        : "=r" (*ebp_ptr), "=r" (*esp_ptr)
-  );
-    return ;
 }
 
 void  print_stack_test(void)
@@ -184,7 +148,12 @@ void  print_stack_test(void)
   uint32_t *esp;
 
   //hexdump_k(*esp, (*ebp - *esp));
-  trace_stack((unsigned long *)esp, (unsigned long *)ebp);
+  asm volatile (
+        "movl %%ebp, %0 \n\t"  // Move the value of EBP into the memory location of ebp_ptr
+        "movl %%esp, %1 \n\t"  // Move the value of ESP into the memory location of esp_ptr
+        : "=r" (*ebp), "=r" (*esp)
+  );
+  //trace_stack((unsigned long *)esp, (unsigned long *)ebp);
   hexdump_k(*esp, *ebp);
   print_k(WHITE, "\n", (char *)VIDEO, active_screen);
   return ;

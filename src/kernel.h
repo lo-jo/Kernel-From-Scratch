@@ -21,8 +21,8 @@ extern unsigned char keyboard_map[128];
 extern void keyboard_handler(void);
 extern char in_port(unsigned short port);
 extern void out_port(unsigned short port, unsigned char data);
-extern void trace_stack(unsigned long *esp, unsigned long *ebp);
-extern void trace_stack_test(unsigned long *ebp, unsigned long *esp);
+extern void trace_stack(int *esp, int *ebp);
+extern void trace_stack_test(int *ebp, int *esp);
 extern void halt(void);
 
 extern void send_triple_fault(void);
@@ -62,6 +62,7 @@ void print_hex(unsigned int value, int color, int size);
 void print_stack(void);
 void print_stack_test(void);
 void putshell(int color, char c, char *screen);
+void  hexdump_k(uint32_t stack_top, int limit);
 void clear_line(char *screen, unsigned int line);
 void ft_sardine(void);
 void ft_help(void);

@@ -48,15 +48,13 @@ void  init_data(void)
     print_k(PINK, "42! - Screen n ", screens[i].screen, i);
     putkey(PINK, (char)((i + 1) + 48), screens[i].screen, i);
     putkey(PINK, '\n', screens[i].screen, i);
-	print_k(PINK, "Press fn + [1] for kernshell\n", screens[i].screen, i);
-	print_k(PINK, "Press fn + [2 - 9] to switch screens\n", screens[i].screen, i);
+	  print_k(PINK, "Press fn + [1] for kernshell\n", screens[i].screen, i);
+	  print_k(PINK, "Press fn + [2 - 9] to switch screens\n", screens[i].screen, i);
   }
-  	memcpy((void *)VIDEO, screens[0].screen, WIDTH * HEIGHT * 2);
-  //print_stack_test();
+  memcpy((void *)VIDEO, screens[0].screen, WIDTH * HEIGHT * 2);
 	if (active_screen == 0){
-		print_k(WHITE, " !!! WELCOME 2 THE GROUNDBREAKING KERNSHELL !!!\n", (char *)VIDEO, active_screen);
-		print_k(GREEN, " !!! Type reboot to send triple fault\n", (char *)VIDEO, active_screen);
-    print_stack_test();
+		print_k(WHITE, " !!! WELCOME 2 THE GROUNDBREAKING KERNISHELL !!!\n", (char *)VIDEO, active_screen);
+		print_k(GREEN, " !!! Type help to see commands !!!\n", (char *)VIDEO, active_screen);
 		putshell(WHITE, '>', (char *)VIDEO);
 	}
   	return ;
@@ -66,7 +64,6 @@ void kmain(void)
 {
 	init_data();
 	init_gdt();
-  print_stack_test();
   while(1){
     	keyboard_routine();
   	}
