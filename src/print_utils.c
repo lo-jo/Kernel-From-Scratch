@@ -139,6 +139,23 @@ void  hexdump_k(uint32_t stack_top, int limit){
     stack_top++;
     address++;
   }
+  if (i % 16 != 0)
+  {
+    i = i % 16;
+    for (int y = 0; y < i * 3; y++)
+      putkey(WHITE, ' ', (char *)VIDEO, active_screen);
+    start_point = address - i;
+    putkey(WHITE, ' ', (char *)VIDEO, active_screen);
+    putkey(WHITE, ' ', (char *)VIDEO, active_screen);
+    for (int y = 0; y < i; y++)
+    {
+      if (start_point[y] <= 32 || start_point[y] >= 126)
+        putkey(WHITE, '.', (char *)VIDEO, active_screen);
+      else
+        putkey(WHITE, start_point[y], (char *)VIDEO, active_screen);
+    }
+    print_k(WHITE, "\n", (char *)VIDEO, active_screen);
+  }
   return ;
 }
 
