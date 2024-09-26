@@ -15,10 +15,7 @@ global start
 global in_port
 global out_port
 global gdt_flush
-global trace_stack
-global trace_stack_test
 global halt
-global send_triple_fault
 global send_reboot
 
 extern kmain 	        ; kmain is defined in the C file
@@ -48,25 +45,6 @@ gdt_flush:
 
 flush2:
     ret
-
-trace_stack:
-    mov eax, [esp + 4]    ; Get the address of the esp variable from the stack
-    mov ebx, [esp + 8]    ; Get the address of the ebp variable from the stack
-    mov [eax], esp        ; Store the current esp into the memory location pointed by eax
-    mov [ebx], ebp        ; Store the current ebp into the memory location pointed by ebx
-    ret
-
-trace_stack_test:
-    mov eax, [esp + 4]  ; Load the address of EBP pointer (first argument)
-    mov ebx, ebp        ; Get the value of EBP
-    mov [eax], ebx      ; Store EBP value at the pointer address
-    mov eax, [esp + 8]  ; Load the address of ESP pointer (second argument)
-    mov ebx, esp        ; Get the value of ESP
-    mov [eax], ebx      ; Store ESP value at the pointer address
-    ret
-
-send_triple_fault:
-    int 0x80
 
 send_reboot:
     int 0x81

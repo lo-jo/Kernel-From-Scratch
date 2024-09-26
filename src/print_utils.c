@@ -159,23 +159,6 @@ void  hexdump_k(uint32_t stack_top, int limit){
   return ;
 }
 
-void  print_stack_test(void)
-{
-  uint32_t *ebp;
-  uint32_t *esp;
-
-  //hexdump_k(*esp, (*ebp - *esp));
-  asm volatile (
-        "movl %%ebp, %0 \n\t"  // Move the value of EBP into the memory location of ebp_ptr
-        "movl %%esp, %1 \n\t"  // Move the value of ESP into the memory location of esp_ptr
-        : "=r" (*ebp), "=r" (*esp)
-  );
-  //trace_stack((unsigned long *)esp, (unsigned long *)ebp);
-  hexdump_k(*esp, *ebp);
-  print_k(WHITE, "\n", (char *)VIDEO, active_screen);
-  return ;
-}
-
 void putkey(int colour, char c, char *screen, unsigned int screen_nb){
 	unsigned short *index;
 	

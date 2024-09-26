@@ -1,6 +1,5 @@
 #include "kernel.h"
 
-
 struct gdt_entry{
     unsigned short limit_low;
     unsigned short base_low;
@@ -18,7 +17,7 @@ struct gdt_ptr{
 struct gdt_entry gdt[7];
 struct gdt_ptr gp;
 
-void set_descriptor(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran){
+static void set_descriptor(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran){
     gdt[num].base_low = (base & 0xFFFF);
     gdt[num].base_middle = (base >> 16) & 0xFF;
     gdt[num].base_high = (base >> 24) & 0xFF;

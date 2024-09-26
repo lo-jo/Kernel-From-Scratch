@@ -21,16 +21,9 @@ extern unsigned char keyboard_map[128];
 extern void keyboard_handler(void);
 extern char in_port(unsigned short port);
 extern void out_port(unsigned short port, unsigned char data);
-extern void trace_stack(int *esp, int *ebp);
-extern void trace_stack_test(int *ebp, int *esp);
 extern void halt(void);
-
 extern void send_triple_fault(void);
-void send_reboot(void);
-
-/******** GDT ********/
-extern void gdt_flush(void);
-void        init_gdt(void);
+extern void send_reboot(void);
 
 /******** Keyboard routines ********/
 #define KEY_PRESSED 0x60
@@ -44,35 +37,35 @@ void        init_gdt(void);
 #define CMD2 0xA0
 #define DATA2 0xA1
 
-
 /******** SCREEN ********/
 #define HEIGHT 25
 #define WIDTH 80
 #define SCREEN_NB 9
 
-void clear_screen(char *screen);
-void print_k(int colour, const char *string, char *screen, unsigned int screen_nb);
-void putkey(int colour, char c, char *screen, unsigned int screen_nb);
-void update_cursor(void);
-void scroll(void);
-void switch_screen(unsigned int screen_nb);
-int  get_index(unsigned int screen_nb);
-void  init_data(void);
-void print_hex(unsigned int value, int color, int size);
-void print_stack(void);
-void print_stack_test(void);
-void putshell(int color, char c, char *screen);
-void  hexdump_k(uint32_t stack_top, int limit);
 void clear_line(char *screen, unsigned int line);
+void clear_screen(char *screen);
+int  get_index(unsigned int screen_nb);
+void scroll(void);
+void update_cursor(void);
+void switch_screen(unsigned int screen_nb);
+void  init_data(void);
+
+/******** PRINT_UTILS ********/
 void ft_sardine(void);
 void ft_help(void);
+void putshell(int color, char c, char *screen);
+void print_hex(unsigned int value, int color, int size);
+void  hexdump_k(uint32_t stack_top, int limit);
+void putkey(int colour, char c, char *screen, unsigned int screen_nb);
+void print_k(int colour, const char *string, char *screen, unsigned int screen_nb);
 
 /******** SHELL ********/
 void  exec_command(const char *command);
 int get_shell_index(unsigned int screen_nb);
 
-/******** IDT ********/
-void init_idt(void);
+/******** GDT ********/
+extern void gdt_flush(void);
+void        init_gdt(void);
 
 /******** stdlib dupes ********/
 void* memset(void* bufptr, int value, int size);
