@@ -6,9 +6,6 @@ align 4
     dd 0x00                  ; Flag for protected mode
     dd -(0x1BADB002 + 0x00)  ; Checksum (magic + flags + checksum = 0)
 
-section .data
-
-
 
 section .text
 global start
