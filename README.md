@@ -1,14 +1,19 @@
-# Kernel-From-Scratch #1
+# Kernel-From-Scratch
 
 A minimal Kernel from scratch bootable with GRUB, written in ASM and C.
 
+This project wa done in collaboration with [@Alban](https://github.com/albibou).
+
 ## Features
 - Printing to screen
-- Helper functions (print single char, print strings)
 - Scroll and cursor support
 - Color support
 - Keyboard entries
-- Different screens and keyboard shortcuts to switch  between them 
+- Different screens and keyboard shortcuts to switch  between them
+- Global Table Descriptor
+- Basic shell commands (halt, reboot, clear...)
+- Stack tracing function
+- Helper functions (printk, ...)
 
 ## Constraints
 - Must compile without dependencies
