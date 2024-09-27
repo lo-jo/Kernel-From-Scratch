@@ -84,9 +84,6 @@ By using [ld](https://www.math.utah.edu/docs/info/ld_toc.html#SEC3), we can writ
 ### Creating a bootable disk image
 https://wiki.osdev.org/Bare_Bones#Building_a_bootable_cdrom_image
 
-NOW THAT IS ONE THING THAT I CANT GET TO DO!!!
-
-
 ### System emulation
 Running our kernel is possible with tools such as QEMU.
 ``` make emulate ``` (without GRUB)
